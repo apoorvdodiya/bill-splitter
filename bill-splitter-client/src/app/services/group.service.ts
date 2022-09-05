@@ -9,7 +9,7 @@ export class GroupService {
   constructor(private httpService: HttpService) {}
 
   getUserGroups(): Observable<any> {
-    return this.httpService.get<any>('groups');
+    return this.httpService.get<any>('groups/user-groups');
   }
 
   createGroup(group: any): Observable<any> {

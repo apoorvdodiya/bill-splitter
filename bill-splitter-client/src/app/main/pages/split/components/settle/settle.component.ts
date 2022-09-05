@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { SplitService } from 'src/app/services/split.service';
 import Swal from 'sweetalert2';
@@ -14,6 +22,9 @@ export class SettleComponent implements OnInit {
   @Input('type') type: any;
   amount: number;
 
+  @Output('onClose') close: EventEmitter<any> = new EventEmitter<any>();
+  @ViewChild('CloseModal') CloseModal: ElementRef;
+
   constructor(
     private spinner: NgxSpinnerService,
     private splitService: SplitService
@@ -24,9 +35,10 @@ export class SettleComponent implements OnInit {
   onSettle() {
     if (this.amount > this.splitter.amount - this.splitter.paidAmount) {
       return Swal.fire({
-        text:
+        title:
           'Amount should not be more than ' +
           (this.splitter.amount - this.splitter.paidAmount),
+        icon: 'warning',
       });
     }
     if (this.amount <= this.splitter.amount - this.splitter.paidAmount) {
@@ -39,19 +51,28 @@ export class SettleComponent implements OnInit {
         this.type == 'payee'
           ? this.splitService.settleAsPayee(this.splitter.id, data)
           : this.splitService.settleAsBorrower(this.splitter.id, data)
-      ).subscribe((res) => {
-        this.spinner.hide();
-        Swal.fire({
-          text: 'Settlement successfull',
-          icon: 'success'
-        })
-      }, err => {
-        Swal.fire({
-          text: err.message || 'Seomthing went wrong',
-          icon: 'error'
-        })
-      });
+      ).subscribe(
+        (res) => {
+          this.spinner.hide();
+          this.onCloseModal();
+          Swal.fire({
+            title: 'Settlement successfull',
+            icon: 'success',
+          });
+        },
+        (err) => {
+          Swal.fire({
+            title: 'Something went wrong',
+            icon: 'error',
+          });
+        }
+      );
     }
     return;
+  }
+
+  onCloseModal() {
+    (this.CloseModal as ElementRef).nativeElement?.click();
+    this.close.emit({ refresh: true });
   }
 }

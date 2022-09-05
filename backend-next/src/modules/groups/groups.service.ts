@@ -19,15 +19,11 @@ export class GroupsService {
 
   async create(params: CreateGroupDto, req: any) {
     try {
-      console.log(params.members);
-      
       const members = await this.userRepository.find({
         where: {
           id: In(params.members),
         },
       });
-      console.log(members);
-
       const group = new Group();
       group.name = params.name;
       group.members = members;
@@ -49,6 +45,18 @@ export class GroupsService {
         // }
       });
       return httpResponses.list('User groups list', groups);
+    } catch (error) {
+      throw error?.message ? error : httpErrors.serverError();
+    }
+  }
+  
+  async getAllUserGroups(req: any) {
+    try {
+      const allGroups = await this.groupRepository.find({
+        relations: ['members']
+      });
+      const userGroups = allGroups.filter(g => g.members.some(m => m.id === +req.user.id))
+      return httpResponses.list('User groups list', userGroups);
     } catch (error) {
       throw error?.message ? error : httpErrors.serverError();
     }

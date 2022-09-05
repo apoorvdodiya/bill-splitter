@@ -36,7 +36,6 @@ export class GroupsComponent implements OnInit {
       },
       (err) => {
         this.spinner.hide();
-        console.log(err);
       }
     );
   }
@@ -48,7 +47,6 @@ export class GroupsComponent implements OnInit {
   }
 
   onSearch(search: string) {
-    console.log(search);
     this.groups = this.backUp.filter((g) =>
       (g.name as string).includes(search)
     );

@@ -19,7 +19,6 @@ export class AuthService {
 
   logout() {
     let userDetails = this.getUserDetails();
-    console.log(userDetails);
     if (userDetails) {
       localStorage.removeItem('_u');
       this.router.navigate(['/auth']);

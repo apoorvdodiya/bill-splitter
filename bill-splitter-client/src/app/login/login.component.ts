@@ -51,11 +51,9 @@ export class LoginComponent implements OnInit {
           }
         },
         (err) => {
-          console.log(err);
-          
           this.spinner.hide();
           swal.fire({
-            text: 'Something went wrong!',
+            title: 'Something went wrong!',
             icon: 'error',
           });
         }

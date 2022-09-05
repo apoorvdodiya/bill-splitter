@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Modal } from 'bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GroupService } from 'src/app/services/group.service';
 import { SplitService } from 'src/app/services/split.service';
@@ -12,6 +20,9 @@ import Swal from 'sweetalert2';
 })
 export class AddEditSplitComponent implements OnInit {
   splitId = null;
+
+  @Output('onClose') close: EventEmitter<any> =  new EventEmitter<any>();
+  @ViewChild('CloseModal') CloseModal: ElementRef;
 
   constructor(
     private groupService: GroupService,
@@ -38,9 +49,13 @@ export class AddEditSplitComponent implements OnInit {
       },
       (err) => {
         this.spinner.hide();
-        console.log(err);
       }
     );
+  }
+
+  onCloseModal() {
+    (this.CloseModal as ElementRef).nativeElement?.click();
+    this.close.emit({ refresh: true });
   }
 
   onSelectGroup() {
@@ -68,18 +83,21 @@ export class AddEditSplitComponent implements OnInit {
   }
 
   onSaveSplit() {
-    console.log(this.splitForm.valid, this.splitForm.value);
-
     if (this.splitForm.valid) {
       this.spinner.show();
       this.splitService.createSplit(this.splitForm.value).subscribe(
         (res) => {
+          Swal.fire({
+            text: res?.message || 'Split created successfully',
+            icon: 'success',
+          });
+          this.onCloseModal();
           this.spinner.hide();
         },
         (err) => {
           this.spinner.hide();
           Swal.fire({
-            text: 'Something went wrong',
+            title: 'Something went wrong',
             icon: 'error',
           });
         }

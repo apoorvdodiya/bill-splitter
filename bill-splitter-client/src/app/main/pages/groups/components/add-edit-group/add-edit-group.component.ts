@@ -33,7 +33,7 @@ export class AddEditGroupComponent implements OnInit {
       },
       (err) => {
         Swal.fire({
-          text: 'Something went wrong!',
+          title: 'Something went wrong!',
           icon: 'error',
         });
       }
@@ -61,13 +61,13 @@ export class AddEditGroupComponent implements OnInit {
           this.spinner.hide();
           Swal.fire({
             icon: 'success',
-            text: 'Group created successfully!',
+            title: 'Group created successfully!',
           });
         },
         (err) => {
           this.spinner.hide();
           Swal.fire({
-            text: 'Something went wrong',
+            title: 'Something went wrong',
             icon: 'error',
           });
         }

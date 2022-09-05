@@ -101,7 +101,7 @@ export class SplitService {
       } else if (type === 'owed') {
         userSplits.push(
           ...(await query
-            .where('splitter.userId = :id AND settled = false', { id: +id })
+            .where('splitter.userId = :id AND settled = false AND splitter.paidAmount != splitter.amount', { id: +id })
             .getMany()),
         );
       } else if (type === 'settled') {
@@ -168,10 +168,20 @@ export class SplitService {
       if (!splitter) {
         throw httpErrors.notFound('Splitter data not found!');
       }
-      if (splitter.paidAmount >= params.amount) {
-        throw httpErrors.badReq('Amount is greater than owed amount!');
+      if (splitter.paidAmount > params.amount) {
+        throw httpErrors.badReq(
+          'Amount should not be greater than owed amount!',
+        );
       }
 
+      splitter.paidAmount = splitter.paidAmount
+        ? splitter.paidAmount + params.amount
+        : params.amount;
+
+      // update the splitter value
+      await this.splitterRepository.save(splitter);
+
+      // mark the settled if paid all the splitter
       const split = await this.splitRepository.findOne({
         where: {
           id: splitter.splitId,
@@ -183,22 +193,10 @@ export class SplitService {
       for (const splitter of split.splitters) {
         totalPaid += splitter.paidAmount;
       }
-      console.log(totalPaid);
-      
-
       if (totalPaid == split.totalAmount) {
-        console.log(true);
-        
         split.settled = true;
         await this.splitRepository.save(split);
       }
-
-      splitter.paidAmount = splitter.paidAmount
-        ? splitter.paidAmount + params.amount
-        : params.amount;
-
-      this.splitterRepository.save(splitter);
-
       return httpResponses.single('Updated splitter data!');
     } catch (error) {
       throw error?.message ? error : httpErrors.serverError();

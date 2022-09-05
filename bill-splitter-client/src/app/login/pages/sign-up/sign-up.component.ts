@@ -56,7 +56,7 @@ export class SignUpComponent implements OnInit {
         (err) => {
           this.spinner.hide();
           swal.fire({
-            text: 'Something went wrong!',
+            title: 'Something went wrong!',
             icon: 'error',
           });
         }

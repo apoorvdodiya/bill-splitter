@@ -21,10 +21,11 @@ export class SplitComponent implements OnInit {
 
   @ViewChild('splitModalRef') splitModalRef: ElementRef;
   splitModal: Modal | null = null;
-
+  expanded = -1;
   @ViewChild('settleModalRef') settleModalRef: ElementRef;
   settleModal: Modal | null = null;
 
+  backup: any[] = [];
   splits: any[] = [];
 
   ngOnInit(): void {
@@ -41,13 +42,13 @@ export class SplitComponent implements OnInit {
     this.splitService.getUserSplitsByType(this.tab).subscribe(
       (res) => {
         this.spinner.hide();
+        this.backup = res.data;
         this.splits = res.data;
-        console.log(res);
       },
       (err) => {
         this.spinner.hide();
         Swal.fire({
-          text: 'Something went wrong!',
+          title: 'Something went wrong!',
         });
       }
     );
@@ -58,6 +59,10 @@ export class SplitComponent implements OnInit {
     this.splitModal.show();
   }
 
+  onExpand(index: number) {
+    this.expanded = this.expanded === index ? -1 : index;
+  }
+
   onSettle(id: number, split: any, splitter: any, type: any) {
     this.selectedSplit = split;
     this.selectedSplitter = splitter;
@@ -65,5 +70,11 @@ export class SplitComponent implements OnInit {
 
     this.settleModal = new Modal(this.settleModalRef?.nativeElement);
     this.settleModal.show();
+  }
+
+  onSearch(search: string) {
+    this.splits = this.backup.filter((s) =>
+      (s.title as string).includes(search)
+    );
   }
 }

@@ -47,6 +47,7 @@ export class AuthService {
     try {
       const user = await this.usersRepository
         .findOne({
+          select: ['firstName', 'lastName', 'password', 'userName', 'email', 'id'],
           where: [{ userName: params.userName }, { email: params.userName }],
         });
 
@@ -59,8 +60,6 @@ export class AuthService {
       }
 
       const token = this.createJwtToken(user);
-      console.log(token);
-
       return httpResponses.single('User logged in successfully!', {
         ...user,
         token,

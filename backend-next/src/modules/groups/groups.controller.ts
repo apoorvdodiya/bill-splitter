@@ -23,6 +23,11 @@ export class GroupsController {
     return this.groupsService.findAll();
   }
 
+  @Get('user-groups')
+  findAllUserGroups(@Req() req: any) {
+    return this.groupsService.getAllUserGroups(req);
+  }
+
   @Get('users')
   findAllUsers() {
     return this.groupsService.findAllUsers();

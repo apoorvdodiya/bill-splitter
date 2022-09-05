@@ -8,7 +8,12 @@
     </div>
   </div>
   <div class="search-box mt-3">
-    <input type="text" placeholder="Search" />
+    <input
+      type="text"
+      placeholder="Search"
+      #searchText
+      (keyup)="onSearch(searchText.value)"
+    />
     <button>
       <i class="fa fa-search fa-sm"></i>
     </button>
@@ -46,7 +51,7 @@
   <div class="tab-content">
     <div class="tab-pane m-0 active fade show" id="paid">
       <div class="data-list-container">
-        <div class="data-list-item" *ngFor="let split of splits">
+        <div class="data-list-item" *ngFor="let split of splits; let i = index">
           <div class="upper">
             <div class="card-column">
               <span>{{ split.title }}</span>
@@ -59,19 +64,15 @@
             </div>
             <div class="me-1" title="45 members">
               <i class="fa fa-rupee"></i>{{ split.totalAmount }}
-              <button
-                class="btn btn-sm btn-flat"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseExample"
-                aria-expanded="false"
-                aria-controls="collapseExample"
-              >
-                <i class="fa fa-caret-up fa-lg"></i>
+              <button class="btn btn-sm btn-flat" (click)="onExpand(i)">
+                <i
+                  class="fa fa-lg"
+                  [ngClass]="expanded === i ? 'fa-caret-down' : 'fa-caret-up'"
+                ></i>
               </button>
             </div>
           </div>
-          <div class="collapse" id="collapseExample">
+          <div class="collapse" [ngClass]="expanded === i ? 'show' : ''">
             <div class="bottom">
               <div class="card-column">
                 <table class="table table-bordered">
@@ -89,9 +90,10 @@
                     </td>
                     <td class="text-centered">
                       <button
+                        *ngIf="splitter?.amount - splitter?.paidAmount"
                         class="btn btn-sm"
                         (click)="
-                          onSettle(splitter.id, split, split?.splitters[0], 'payee')
+                          onSettle(splitter.id, split, splitter, 'payee')
                         "
                       >
                         Settle
@@ -120,8 +122,19 @@
                 }}
               </div>
             </div>
-            <div class="card-column text-right">
-              <button class="btn btn-sm btn-danger" style="margin: auto">
+            <div class="card-column justify-content-center">
+              <button
+                class="btn btn-sm"
+                style="margin: 0 30px 0 auto"
+                (click)="
+                  onSettle(
+                    split.splitters[0].id,
+                    split,
+                    split.splitters[0],
+                    'borrower'
+                  )
+                "
+              >
                 Settle
               </button>
             </div>
@@ -132,14 +145,46 @@
     </div>
     <div class="tab-pane m-0 fade" id="settled">
       <div class="data-list-container">
-        <div class="upper">
-          <div class="data-list-item" *ngFor="let split of splits">
+        <div class="data-list-item" *ngFor="let split of splits; let i = index">
+          <div class="upper">
             <div class="card-column">
-              <span></span>
-              <span>+3476 INR</span>
+              <span>{{ split.title }}</span>
+              <div>
+                <small
+                  >Created on {{ split.createdAt | date: "d MMMM YYYY" }} By
+                  you</small
+                >
+              </div>
             </div>
             <div class="me-1" title="45 members">
-              45 <i class="fa fa-user"></i>
+              <i class="fa fa-rupee"></i>{{ split.totalAmount }}
+              <button class="btn btn-sm btn-flat" (click)="onExpand(i)">
+                <i
+                  class="fa fa-lg"
+                  [ngClass]="expanded === i ? 'fa-caret-down' : 'fa-caret-up'"
+                ></i>
+              </button>
+            </div>
+          </div>
+          <div class="collapse" [ngClass]="expanded === i ? 'show' : ''">
+            <div class="bottom">
+              <div class="card-column">
+                <table class="table table-bordered">
+                  <tr *ngFor="let splitter of split.splitters">
+                    <td>
+                      {{
+                        splitter?.user?.firstName +
+                          " " +
+                          splitter?.user?.lastName
+                      }}
+                    </td>
+                    <td>
+                      <i class="fa fa-rupee"></i>{{ splitter?.paidAmount }}
+                    </td>
+                    <td class="text-centered">settled</td>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -149,12 +194,13 @@
   </div>
 </div>
 <div class="modal" tabindex="-1" #splitModalRef>
-  <app-add-edit-split></app-add-edit-split>
+  <app-add-edit-split (onClose)="setPane(tab)"></app-add-edit-split>
 </div>
 <div class="modal" tabindex="-1" #settleModalRef>
   <app-settle
     [splitter]="selectedSplitter"
     [split]="selectedSplit"
     [type]="settleType"
+    (onClose)="setPane(tab)"
   ></app-settle>
 </div>
