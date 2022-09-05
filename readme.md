@@ -38,3 +38,13 @@ cd bill-splitter-client
 npm i
 npx ng s
 ```
+
+
+41
+​
+## To Do
+
+- Bug fix
+- Add ratio feature in splits
+- Add PWA for mobile
+          
