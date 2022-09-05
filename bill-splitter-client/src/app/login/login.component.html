@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="login-container">
+    <div class="logo">
+      <i class="fa fa-bolt fa-4x"></i>
+    </div>
+    <div class="brand-name display-4 my-3">My Cut</div>
+    <div class="login-form" [formGroup]="loginForm">
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          name="userName"
+          formControlName="userName"
+          id="i-userName"
+          class="form-control"
+          placeholder="Username"
+        />
+        <div class="text-danger px-2" *ngIf="getError(loginForm.controls['userName'])">
+          <small>Please enter username</small>
+        </div>
+      </div>
+      <div class="form-group mb-2">
+        <input
+          type="password"
+          name="password"
+          formControlName="password"
+          id="i-password"
+          class="form-control"
+          placeholder="Password"
+        />
+        <div class="text-danger px-2" *ngIf="getError(loginForm.controls['password'])">
+          <small>Please enter password</small>
+        </div>
+      </div>
+      <button class="btn btn-primary w-100 mt-2" (click)="onLogin()">Login</button>
+      <div class="links text-small my-2 px-1">
+        <!-- <span routerLink="/auth/forgot-password"
+          ><small>Forgot password?</small></span
+        > -->
+        <span routerLink="/auth/sign-up"><small>New User?</small></span>
+      </div>
+    </div>
+  </div>
+</div>

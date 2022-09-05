@@ -1,0 +1,18 @@
+.settle-container {
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .settle-amount {
+    input {
+      min-width: 50px;
+      width: 300px;
+      background: transparent;
+      border: none;
+      outline: none;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+.selected-users {
+  display: flex;
+  flex-direction: column;
+
+  .user {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+
+    .name, .user-ratio, .amount {
+      width: fit-content;
+      height: fit-content;
+      min-width: 15%;
+    }
+
+    .name {
+      flex-grow: 1;
+    }
+
+    .user-ratio {
+      display: flex;
+      flex-direction: row !important;
+      justify-content: space-between;
+      margin: 0 5px;
+    }
+    
+    .amount {
+      // input {
+      //   width: fit-content;
+      // }
+    }
+  }
+}
+
+.user-ratio {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between;
+  margin: auto;
+  width: fit-content;
+}

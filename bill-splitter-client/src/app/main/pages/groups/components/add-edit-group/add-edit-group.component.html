@@ -1,0 +1,55 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">{{ groupId ? "Edit" : "Add" }} Group</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group my-2" [formGroup]="groupForm">
+        <input
+          type="text"
+          name="name"
+          formControlName="name"
+          id="i-groupName"
+          class="form-control"
+          placeholder="Group name"
+        />
+      </div>
+      <div class="form-group my-2">
+        <ng-select
+          class="form-control"
+          [placeholder]="selection.length ? '' : 'Select users'"
+          appearance="outline"
+          bindValue="id"
+          [multiple]="true"
+          [(ngModel)]="selection"
+        >
+          <ng-option *ngFor="let user of users" [value]="user.id">
+            {{ user.firstName + " " + user.lastName }}
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        (click)="onSave()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

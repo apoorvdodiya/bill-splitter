@@ -1,0 +1,160 @@
+<div class="container">
+  <div class="page-header">
+    <span class="title">My Activity</span>
+    <div class="buttons">
+      <button class="btn btn-outline-primary rounded-circle" (click)="onAdd()">
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+  </div>
+  <div class="search-box mt-3">
+    <input type="text" placeholder="Search" />
+    <button>
+      <i class="fa fa-search fa-sm"></i>
+    </button>
+  </div>
+  <ul class="nav nav-pills nav-pills-sm my-2">
+    <li class="nav-item">
+      <a
+        class="nav-link active"
+        data-bs-toggle="pill"
+        href="#paid"
+        (click)="setPane('paid')"
+        >Paid</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="pill"
+        href="#owed"
+        (click)="setPane('owed')"
+        >Owed</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="pill"
+        href="#settled"
+        (click)="setPane('settled')"
+        Q
+        >Settled</a
+      >
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane m-0 active fade show" id="paid">
+      <div class="data-list-container">
+        <div class="data-list-item" *ngFor="let split of splits">
+          <div class="upper">
+            <div class="card-column">
+              <span>{{ split.title }}</span>
+              <div>
+                <small
+                  >Created on {{ split.createdAt | date: "d MMMM YYYY" }} By
+                  you</small
+                >
+              </div>
+            </div>
+            <div class="me-1" title="45 members">
+              <i class="fa fa-rupee"></i>{{ split.totalAmount }}
+              <button
+                class="btn btn-sm btn-flat"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseExample"
+                aria-expanded="false"
+                aria-controls="collapseExample"
+              >
+                <i class="fa fa-caret-up fa-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="collapse" id="collapseExample">
+            <div class="bottom">
+              <div class="card-column">
+                <table class="table table-bordered">
+                  <tr *ngFor="let splitter of split.splitters">
+                    <td>
+                      {{
+                        splitter?.user?.firstName +
+                          " " +
+                          splitter?.user?.lastName
+                      }}
+                    </td>
+                    <td>
+                      <i class="fa fa-rupee"></i
+                      >{{ splitter?.amount - splitter?.paidAmount }}
+                    </td>
+                    <td class="text-centered">
+                      <button
+                        class="btn btn-sm"
+                        (click)="
+                          onSettle(splitter.id, split, split?.splitters[0], 'payee')
+                        "
+                      >
+                        Settle
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!splits.length">No records found</div>
+    </div>
+    <div class="tab-pane m-0 fade" id="owed">
+      <div class="data-list-container">
+        <div class="data-list-item" *ngFor="let split of splits">
+          <div class="upper">
+            <div class="card-column">
+              <span>{{ split?.title }}</span>
+              <div>
+                <i class="fa fa-rupee"></i>-{{
+                  split?.splitters &&
+                    split?.splitters[0]?.amount -
+                      split?.splitters[0]?.paidAmount
+                }}
+              </div>
+            </div>
+            <div class="card-column text-right">
+              <button class="btn btn-sm btn-danger" style="margin: auto">
+                Settle
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!splits.length">No records found</div>
+    </div>
+    <div class="tab-pane m-0 fade" id="settled">
+      <div class="data-list-container">
+        <div class="upper">
+          <div class="data-list-item" *ngFor="let split of splits">
+            <div class="card-column">
+              <span></span>
+              <span>+3476 INR</span>
+            </div>
+            <div class="me-1" title="45 members">
+              45 <i class="fa fa-user"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!splits.length">No records found</div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" #splitModalRef>
+  <app-add-edit-split></app-add-edit-split>
+</div>
+<div class="modal" tabindex="-1" #settleModalRef>
+  <app-settle
+    [splitter]="selectedSplitter"
+    [split]="selectedSplit"
+    [type]="settleType"
+  ></app-settle>
+</div>

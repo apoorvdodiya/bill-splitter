@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="login-container">
+    <div class="logo">
+      <i class="fa fa-bolt fa-4x"></i>
+    </div>
+    <div class="brand-name display-4 my-3">My Cut</div>
+    <div class="login-form" [formGroup]="signUpForm">
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          name="firstName"
+          formControlName="firstName"
+          id="i-firstName"
+          class="form-control"
+          placeholder="First name"
+        />
+        <div class="text-danger px-2" *ngIf="getError(signUpForm.controls['firstName'])">
+          <small>Please enter first</small>
+        </div>
+      </div>
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          name="lastName"
+          formControlName="lastName"
+          id="i-lastName"
+          class="form-control"
+          placeholder="Last name"
+        />
+        <div class="text-danger px-2" *ngIf="getError(signUpForm.controls['lastName'])">
+          <small>Please enter last name</small>
+        </div>
+      </div>
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          name="userName"
+          formControlName="userName"
+          id="i-userName"
+          class="form-control"
+          placeholder="Username"
+        />
+        <div class="text-danger px-2" *ngIf="getError(signUpForm.controls['userName'])">
+          <small>Please enter username</small>
+        </div>
+      </div>
+      <div class="form-group mb-2">
+        <input
+          type="email"
+          name="email"
+          formControlName="email"
+          id="i-email"
+          class="form-control"
+          placeholder="Email"
+        />
+        <div class="text-danger px-2" *ngIf="getError(signUpForm.controls['email'])">
+          <small>Please enter email</small>
+        </div>
+      </div>
+      <div class="form-group mb-2">
+        <input
+          type="password"
+          name="password"
+          formControlName="password"
+          id="i-password"
+          class="form-control"
+          placeholder="Password"
+        />
+        <div class="text-danger px-2" *ngIf="getError(signUpForm.controls['password'])">
+          <small>Please enter password</small>
+        </div>
+      </div>
+      <div class="form-group mb-2">
+        <input
+          type="password"
+          name="confirmPassword"
+          formControlName="confirmPassword"
+          id="i-confirm-password"
+          class="form-control"
+          placeholder="Confirm Password"
+        />
+        <div class="text-danger px-2" *ngIf="getError(signUpForm.controls['confirmPassword'])">
+          <small>Please enter confirm password</small>
+        </div>
+      </div>
+      <button class="btn btn-primary w-100 mt-2" (click)="onSignUp()">Sign up</button>
+      <div class="links text-small my-2 px-1">
+        <span routerLink="/auth/login"><small>Have an account?</small></span>
+      </div>
+    </div>
+  </div>
+</div>

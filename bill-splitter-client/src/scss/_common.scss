@@ -1,0 +1,95 @@
+*,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+/** PAGE CCS STARTS **/
+.container {
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+
+  .title {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .buttons {
+    display: flex;
+
+    button {
+      padding: 2px 8px;
+    }
+  }
+}
+/** PAGE CCS STARTS **/
+
+.search-box {
+  display: flex;
+  border: 1px solid $border-dark;
+  border-radius: 20px;
+  padding: 6px 10px;
+  margin: 5px;
+  align-items: flex-start;
+
+  input {
+    border: 0;
+    flex-grow: 1;
+    margin-left: 3px;
+    outline: none;
+    padding: 0;
+  }
+  button {
+    border: 0px solid;
+    background-color: transparent;
+    padding-top: 0;
+    outline: none;
+  }
+}
+
+/** DATA LIST **/
+.data-list-container {
+  margin: 10px 0;
+  overflow: auto;
+  height: inherit;
+  .data-list-item {
+    border: 1px solid $border-dark;
+    padding: 5px 8px;
+    margin: 7px;
+    
+    .upper, .bottom {
+      display: flex;
+      justify-content: space-around;
+
+      .card-column {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      .end {
+        // margin-left: auto;
+      }
+    }
+  }
+}
+
+/** BS MODAL **/
+.modal-dialog, .modal-content
+// modal-header
+{
+  height: fit-content;
+}
+
+
+/** COMMON **/
+.btn-flat {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-color: transparent;
+}

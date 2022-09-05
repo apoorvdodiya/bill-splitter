@@ -1,0 +1,34 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Settle</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="settle-container">
+        <div class="settle-amount display-4">
+          <input type="number" name="" id="" [(ngModel)]="amount" placeholder="0">
+        </div>
+        <div class="message">
+          Paying {{amount}} amount to {{split?.createdBy?.firstName + ' ' + split?.createdBy?.lastName}}
+        </div>
+      </div>  
+    </div>
+    <div class="modal-footer">
+      <button
+        (click)="onSettle()"
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm" (click)="onSettle()">Save</button>
+    </div>
+  </div>
+</div>
