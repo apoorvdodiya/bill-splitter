@@ -34,7 +34,7 @@ npx run start:dev
 #### Start frontend server
 
 ```
-cd backend-next
+cd bill-splitter-client
 npm i
-npx run start:dev
+npx ng s
 ```
