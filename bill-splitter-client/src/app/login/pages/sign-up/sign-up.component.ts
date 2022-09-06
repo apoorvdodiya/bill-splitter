@@ -32,20 +32,21 @@ export class SignUpComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       userName: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.pattern(/^(.+)@(.+)$/)]],
       password: ['', [Validators.required]],
-      confirmPassword : ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]],
     });
   }
 
-  getError(control: AbstractControl) {
-    return control?.touched && control?.errors && control?.errors['required'];
+  getError(control: AbstractControl, error = 'required') {
+    return control?.touched && control?.errors && control?.errors[error];
   }
 
   onSignUp() {
-    if (this.signUpForm.valid) {
+    const data = this.signUpForm.value;
+    if (this.signUpForm.valid && data.password === data.confirmPassword) {
       this.spinner.show();
-      this.authService.userSignUp(this.signUpForm.value).subscribe(
+      this.authService.userSignUp(data).subscribe(
         (res) => {
           this.spinner.hide();
           if (res?.success) {
@@ -56,7 +57,7 @@ export class SignUpComponent implements OnInit {
         (err) => {
           this.spinner.hide();
           swal.fire({
-            title: 'Something went wrong!',
+            title: err?.error?.message || 'Something went wrong!',
             icon: 'error',
           });
         }

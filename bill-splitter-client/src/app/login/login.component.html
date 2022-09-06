@@ -12,13 +12,13 @@
           formControlName="userName"
           id="i-userName"
           class="form-control"
-          placeholder="Username"
+          placeholder="Username or Email"
         />
         <div class="text-danger px-2" *ngIf="getError(loginForm.controls['userName'])">
           <small>Please enter username</small>
         </div>
       </div>
-      <div class="form-group mb-2">
+      <form class="form-group mb-2" (submit)="onLogin()">
         <input
           type="password"
           name="password"
@@ -30,13 +30,13 @@
         <div class="text-danger px-2" *ngIf="getError(loginForm.controls['password'])">
           <small>Please enter password</small>
         </div>
-      </div>
-      <button class="btn btn-primary w-100 mt-2" (click)="onLogin()">Login</button>
+      </form>
+      <button class="btn btn-primary w-100 mt-2" type="submit" (click)="onLogin()">Login</button>
       <div class="links text-small my-2 px-1">
-        <!-- <span routerLink="/auth/forgot-password"
-          ><small>Forgot password?</small></span
+        <!-- <a class="text-decoration-none" routerLink="/auth/forgot-password"
+          ><small>Forgot password?</small></a
         > -->
-        <span routerLink="/auth/sign-up"><small>New User?</small></span>
+        <a class="text-decoration-none" routerLink="/auth/sign-up"><small>New User?</small></a>
       </div>
     </div>
   </div>

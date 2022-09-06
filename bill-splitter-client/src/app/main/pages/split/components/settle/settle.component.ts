@@ -61,8 +61,9 @@ export class SettleComponent implements OnInit {
           });
         },
         (err) => {
+          this.spinner.hide();
           Swal.fire({
-            title: 'Something went wrong',
+            title: err?.error?.message || 'Something went wrong',
             icon: 'error',
           });
         }

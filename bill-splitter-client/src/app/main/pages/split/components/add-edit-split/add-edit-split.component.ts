@@ -67,7 +67,7 @@ export class AddEditSplitComponent implements OnInit {
     for (const member of group?.members) {
       (this.splitForm.controls['splitters'] as FormArray).push(
         this.fb.group({
-          amount: [group?.members?.length ? amount / group.members.length : 0],
+          amount: [group?.members?.length ? (amount / group.members.length).toFixed(2) : 0],
           ration: [1],
           groupId: [group.id],
           userId: [member.id],

@@ -26,7 +26,22 @@
           <!-- <span><i class="fa fa-rupee"></i> {{ group.totalAmount }}</span> -->
         </div>
         <div class="me-1" title="45 members">
+          <button class="btn btn-sm btn-flat pt-0" (click)="onExpand(i)">
+            <i
+              class="fa fa-lg"
+              [ngClass]="expanded === i ? 'fa-caret-up' : 'fa-caret-down'"
+            ></i>
+          </button>
           {{ group.members.length }} <i class="fa fa-user"></i>
+        </div>
+      </div>
+      <div class="collapse" [ngClass]="expanded === i ? 'show' : ''">
+        <div class="bottom">
+          <div class="card-column">
+            <div *ngFor="let member of group.members">
+              {{ member?.firstName + " " + member?.lastName }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -34,5 +49,5 @@
   </div>
 </div>
 <div class="modal" tabindex="-1" #groupModalRef>
-  <app-add-edit-group></app-add-edit-group>
+  <app-add-edit-group (onClose)="getUserGroups()"></app-add-edit-group>
 </div>

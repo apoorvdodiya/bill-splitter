@@ -18,6 +18,7 @@ export class GroupsComponent implements OnInit {
 
   @ViewChild('groupModalRef') groupModalRef: ElementRef;
   groupModal: Modal | null = null;
+  expanded = -1;
 
   groups: any[] = [];
   backUp: any[] = [];
@@ -44,6 +45,10 @@ export class GroupsComponent implements OnInit {
     this.groupModal = new Modal(this.groupModalRef?.nativeElement, {});
 
     this.groupModal.show();
+  }
+
+  onExpand(index: number) {
+    this.expanded = this.expanded === index ? -1 : index;
   }
 
   onSearch(search: string) {

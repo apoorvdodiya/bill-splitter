@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(
-    private autService: AuthService
-  ) {}
+  constructor(private autService: AuthService) {}
   firstClick = false;
 
   ngOnInit(): void {}
@@ -22,7 +21,12 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.autService.logout();
+    Swal.fire({
+      title: 'Are you sure you want to logout',
+      icon: 'warning',
+      showCancelButton: true,
+    }).then((res) => {
+      if (res.isConfirmed) this.autService.logout();
+    });
   }
-
 }

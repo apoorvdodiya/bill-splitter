@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         (err) => {
           this.spinner.hide();
           swal.fire({
-            title: 'Something went wrong!',
+            title: err?.error.message || 'Something went wrong!',
             icon: 'error',
           });
         }

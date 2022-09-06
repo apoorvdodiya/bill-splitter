@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://obscure-tor-57734.herokuapp.com/',
 };
