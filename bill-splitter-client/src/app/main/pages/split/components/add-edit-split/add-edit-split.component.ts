@@ -20,8 +20,9 @@ import Swal from 'sweetalert2';
 })
 export class AddEditSplitComponent implements OnInit {
   splitId = null;
+  totalRatio: number = 0;
 
-  @Output('onClose') close: EventEmitter<any> =  new EventEmitter<any>();
+  @Output('onClose') close: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('CloseModal') CloseModal: ElementRef;
 
   constructor(
@@ -58,24 +59,48 @@ export class AddEditSplitComponent implements OnInit {
     this.close.emit({ refresh: true });
   }
 
-  onSelectGroup() {
+  onSelectGroup(groupChanged = false) {
     const selectedGroup = this.splitForm.controls['selectedGroup'].value;
     const group = this.groups.find((g) => g.id === +selectedGroup);
 
-    const amount = this.splitForm.controls['totalAmount']?.value;
-    (this.splitForm.controls['splitters'] as FormArray) = new FormArray([]);
-    for (const member of group?.members) {
-      (this.splitForm.controls['splitters'] as FormArray).push(
-        this.fb.group({
-          amount: [group?.members?.length ? (amount / group.members.length).toFixed(2) : 0],
-          ration: [1],
-          groupId: [group.id],
-          userId: [member.id],
-          member,
-        })
-      );
+    if (selectedGroup) {
+      this.totalRatio = group?.members?.length || 0;
+      const amount = this.splitForm.controls['totalAmount']?.value;
+      (this.splitForm.controls['splitters'] as FormArray) = new FormArray([]);
+      for (const member of group?.members) {
+        (this.splitForm.controls['splitters'] as FormArray).push(
+          this.fb.group({
+            amount: [
+              group?.members?.length
+                ? (amount / group.members.length).toFixed(2)
+                : 0,
+            ],
+            ration: [1],
+            groupId: [group.id],
+            userId: [member.id],
+            member,
+          })
+        );
+      }
+      this.splitForm.updateValueAndValidity();
+    } else {
+      const amount =
+        this.splitForm.controls['totalAmount']?.value / this.totalRatio;
+      const members = (this.splitForm.controls['splitters'] as FormArray).value;
+      (this.splitForm.controls['splitters'] as FormArray) = new FormArray([]);
+      for (const member of members) {
+        (this.splitForm.controls['splitters'] as FormArray).push(
+          this.fb.group({
+            amount: [member.ratio * amount],
+            ration: [member.ratio],
+            groupId: [group.id],
+            userId: [member.id],
+            member,
+          })
+        );
+      }
+      this.splitForm.updateValueAndValidity();
     }
-    this.splitForm.updateValueAndValidity();
   }
 
   getSpliitersArrayForm() {
@@ -103,6 +128,40 @@ export class AddEditSplitComponent implements OnInit {
         }
       );
     }
+  }
+
+  onRatio(op: 'minus' | 'plus', index: number) {
+    const splitter = (
+      (this.splitForm.controls['splitters'] as FormArray).at(index) as FormGroup
+    ).value;
+
+    if (op === 'minus' && splitter.ration === 1) {
+      return;
+    }
+
+    const members = (this.splitForm.controls['splitters'] as FormArray).value;
+
+    this.totalRatio = this.totalRatio + (op === 'plus' ? 1 : -1);
+    const amount =
+      this.splitForm.controls['totalAmount']?.value / this.totalRatio;
+    (this.splitForm.controls['splitters'] as FormArray) = new FormArray([]);
+    for (const member of members) {
+      const newRation = (
+        member.userId === splitter.userId
+          ? (op === 'plus' ? ++member.ration : --member.ration)
+          : member.ration
+      );
+      (this.splitForm.controls['splitters'] as FormArray).push(
+        this.fb.group({
+          amount: [(newRation * amount).toFixed(2)],
+          ration: [newRation],
+          groupId: [member.groupId],
+          userId: [member.userId],
+          member,
+        })
+      );
+    }
+    this.splitForm.updateValueAndValidity();
   }
 
   createForm() {

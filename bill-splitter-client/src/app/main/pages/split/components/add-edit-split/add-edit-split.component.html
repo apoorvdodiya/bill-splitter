@@ -33,13 +33,13 @@
         <select
           class="form-control"
           formControlName="selectedGroup"
-          (change)="onSelectGroup()"
+          (change)="onSelectGroup(true)"
         >
-        <option value="null" selected disabled> Select Group</option>
-        <option [value]="group?.id" *ngFor="let group of groups">
-          {{group?.name}}
-        </option>
-      </select>
+          <option value="null" selected disabled>Select Group</option>
+          <option [value]="group?.id" *ngFor="let group of groups">
+            {{ group?.name }}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <input
@@ -92,24 +92,30 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let splitter of getSpliitersArrayForm()">
-            <td>{{splitter?.member?.firstName + ' ' + splitter?.member?.lastName}}</td>
-            <td class="text-center">
-              <!-- <div class="user-ratio">
-                <button
-                  class="btn btn-sm btn-outline-primary rounded-circle py-0 p-1 my-0 mx-1"
-                >
-                  <i class="fa fa-plus fa-xs"></i>
-                </button>
-                <div class="mx-1">2</div>
-                <button
-                  class="btn btn-sm btn-outline-primary rounded-circle py-0 p-1 my-0 mx-1"
-                >
-                  <i class="fa fa-plus fa-xs"></i>
-                </button>
-              </div> -->
+          <tr *ngFor="let splitter of getSpliitersArrayForm(); let i = index">
+            <td>
+              {{
+                splitter?.member?.firstName + " " + splitter?.member?.lastName
+              }}
             </td>
-            <td class="text-end">{{splitter?.amount}}</td>
+            <td class="text-center">
+              <div class="user-ratio">
+                <button
+                  class="btn btn-sm btn-outline-primary rounded-circle py-0 p-1 my-0 mx-1"
+                  (click)="onRatio('minus', i)"
+                >
+                  <i class="fa fa-minus fa-xs"></i>
+                </button>
+                <div class="mx-1">{{splitter?.ration}}</div>
+                <button
+                  class="btn btn-sm btn-outline-primary rounded-circle py-0 p-1 my-0 mx-1"
+                  (click)="onRatio('plus', i)"
+                >
+                  <i class="fa fa-plus fa-xs"></i>
+                </button>
+              </div>
+            </td>
+            <td class="text-end">{{ splitter?.amount }}</td>
           </tr>
         </tbody>
       </table>
@@ -123,7 +129,13 @@
       >
         Close
       </button>
-      <button type="button" class="btn btn-outline-primary btn-sm" (click)="onSaveSplit()">Save</button>
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        (click)="onSaveSplit()"
+      >
+        Save
+      </button>
     </div>
   </div>
 </div>

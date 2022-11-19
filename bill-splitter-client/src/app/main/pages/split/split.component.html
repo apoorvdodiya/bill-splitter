@@ -96,7 +96,7 @@
                           onSettle(splitter.id, split, splitter, 'payee')
                         "
                       >
-                        Settle
+                        <i class="fa fa-hand-holding-usd"></i> Deposite
                       </button>
                     </td>
                   </tr>
@@ -117,11 +117,16 @@
               <div>
                 <small
                   >Created on {{ split.createdAt | date: "d MMMM YYYY" }} By
-                  {{split?.createdBy?.firstName + ' ' + split?.createdBy?.lastName}}</small
+                  {{
+                    split?.createdBy?.firstName +
+                      " " +
+                      split?.createdBy?.lastName
+                  }}</small
                 >
               </div>
               <div>
-                -<i class="fa fa-rupee"></i>{{
+                -<i class="fa fa-rupee"></i
+                >{{
                   split?.splitters &&
                     split?.splitters[0]?.amount -
                       split?.splitters[0]?.paidAmount
