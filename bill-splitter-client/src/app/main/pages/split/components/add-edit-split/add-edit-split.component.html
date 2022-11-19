@@ -9,7 +9,7 @@
         aria-label="Close"
       ></button>
     </div>
-    <div class="modal-body" [formGroup]="splitForm">
+    <div class="modal-body">
       <div class="form-group my-2">
         <input
           type="text"
@@ -17,10 +17,9 @@
           id="i-title"
           class="form-control"
           placeholder="Title"
-          formControlName="title"
         />
       </div>
-      <!-- <div class="d-flex justify-content-around">
+      <div class="d-flex justify-content-around">
         <div class="ms-2">Split with</div>
         <div>
           <select name="splitWith" id="i-splitWith" class="form-control">
@@ -28,28 +27,24 @@
             <option>Users</option>
           </select>
         </div>
-      </div> -->
+      </div>
       <div class="form-group my-2">
-        <select
+        <ng-select
           class="form-control"
-          formControlName="selectedGroup"
-          (change)="onSelectGroup(true)"
-        >
-          <option value="null" selected disabled>Select Group</option>
-          <option [value]="group?.id" *ngFor="let group of groups">
-            {{ group?.name }}
-          </option>
-        </select>
+          placeholder="Select group"
+          [items]="groups"
+          bindLabel="name"
+          bindValue="name"
+          [multiple]="false"
+        ></ng-select>
       </div>
       <div class="form-group">
         <input
           type="number"
-          name="totalAmount"
+          name="amount"
           id="i-amount"
           class="form-control"
           placeholder="Amount"
-          formControlName="totalAmount"
-          (change)="onSelectGroup()"
         />
       </div>
       <div class="form-group my-2">
@@ -59,7 +54,6 @@
           id="i-description"
           class="form-control"
           placeholder="Description"
-          formControlName="description"
         />
       </div>
     </div>
@@ -92,30 +86,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let splitter of getSpliitersArrayForm(); let i = index">
-            <td>
-              {{
-                splitter?.member?.firstName + " " + splitter?.member?.lastName
-              }}
-            </td>
+          <tr>
+            <td>Vijay</td>
             <td class="text-center">
               <div class="user-ratio">
                 <button
                   class="btn btn-sm btn-outline-primary rounded-circle py-0 p-1 my-0 mx-1"
-                  (click)="onRatio('minus', i)"
                 >
-                  <i class="fa fa-minus fa-xs"></i>
+                  <i class="fa fa-plus fa-xs"></i>
                 </button>
-                <div class="mx-1">{{splitter?.ration}}</div>
+                <div class="mx-1">2</div>
                 <button
                   class="btn btn-sm btn-outline-primary rounded-circle py-0 p-1 my-0 mx-1"
-                  (click)="onRatio('plus', i)"
                 >
                   <i class="fa fa-plus fa-xs"></i>
                 </button>
               </div>
             </td>
-            <td class="text-end">{{ splitter?.amount }}</td>
+            <td class="text-end">200</td>
           </tr>
         </tbody>
       </table>
@@ -125,17 +113,10 @@
         type="button"
         class="btn btn-outline-primary btn-sm"
         data-bs-dismiss="modal"
-        #CloseModal
       >
         Close
       </button>
-      <button
-        type="button"
-        class="btn btn-outline-primary btn-sm"
-        (click)="onSaveSplit()"
-      >
-        Save
-      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm">Save</button>
     </div>
   </div>
 </div>

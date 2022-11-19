@@ -1,34 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { async } from 'rxjs';
 import { httpErrors } from 'src/helpers/errors';
 import { httpResponses } from 'src/helpers/response';
-import { In, Repository } from 'typeorm';
-import { User } from '../auth/entities/user.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { Group } from './entities/group.entity';
 
 @Injectable()
 export class GroupsService {
   constructor(
-    @InjectRepository(Group)
-    private groupRepository: Repository<Group>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @Inject('groupsModel') private groupsModel: Model<any>,
+    @Inject('usersModel') private usersModel: Model<any>,
   ) {}
 
   async create(params: CreateGroupDto, req: any) {
     try {
-      const members = await this.userRepository.find({
-        where: {
-          id: In(params.members),
-        },
-      });
-      const group = new Group();
-      group.name = params.name;
-      group.members = members;
+      console.log(req);
+      // const members = await this.usersModel.find({
+      //   _id: { $in: params.members },
+      // });
 
-      this.groupRepository.save(group);
+      const group = await this.groupsModel.insertMany([
+        {
+          name: params.name,
+          members: params.members,
+        },
+      ]);
 
       return httpResponses.single('Group created successfully!', group);
     } catch (error) {
@@ -38,36 +35,20 @@ export class GroupsService {
 
   async findAll() {
     try {
-      const groups = await this.groupRepository.find({
-        relations: ['members'],
-        // wwhere : {
-        //   members: 6
+      const groups = await this.groupsModel.find({
+        // {
+        //   $in: ['']
         // }
-      });
+      }).populate('members');
       return httpResponses.list('User groups list', groups);
     } catch (error) {
       throw error?.message ? error : httpErrors.serverError();
     }
   }
-  
-  async getAllUserGroups(req: any) {
-    try {
-      const allGroups = await this.groupRepository.find({
-        relations: ['members']
-      });
-      const userGroups = allGroups.filter(g => g.members.some(m => m.id === +req.user.id))
-      return httpResponses.list('User groups list', userGroups);
-    } catch (error) {
-      throw error?.message ? error : httpErrors.serverError();
-    }
-  }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     try {
-      const group = await this.groupRepository.findOne({
-        where: { id },
-        relations: ['members'],
-      });
+      const group = await this.groupsModel.findById(id);
       if (!group) throw httpErrors.notFound('Group not found!');
 
       return httpResponses.single('Group details', group);
@@ -76,34 +57,18 @@ export class GroupsService {
     }
   }
 
-  async findAllUsers() {
+  async update(id: string, params: UpdateGroupDto) {
     try {
-      const users = await this.userRepository.find();
-      return httpResponses.list('Users list', users);
-    } catch (error) {
-      throw error?.message ? error : httpErrors.serverError();
-    }
-  }
-
-  async update(id: number, params: UpdateGroupDto) {
-    try {
-      const group = await this.groupRepository.findOne({
-        relations: ['members'],
-        where: { id },
-      });
+      const group = await this.groupsModel.findById(id);
 
       if (!group) {
         throw httpErrors.notFound('Group not found!');
       }
 
       group.name = params.name;
-      group.members = await this.userRepository.find({
-        where: {
-          id: In(params.members)
-        }
-      })
+      group.members = params.members;
 
-      await this.groupRepository.save(group);
+      await group.save();
 
       return httpResponses.single('Group details updated successfully!');
     } catch (error) {

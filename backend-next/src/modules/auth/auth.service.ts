@@ -1,25 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
 import { httpErrors } from 'src/helpers/errors';
 import { httpResponses } from 'src/helpers/response';
 import { loginUserDto, SignUpUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-    private jwtService: JwtService,
-  ) {}
+    @Inject('usersModel') private userModel: Model<any>,
+    private jwtService: JwtService
+  ) { }
 
   async signUpUser(params: SignUpUserDto) {
     try {
-      const users = await this.usersRepository.find({
-        where: [{ userName: params.userName }, { email: params.email }],
+      const users = await this.userModel.find({
+        $or: [{ userName: params.userName }, { email: params.email }],
       });
 
       if (users.find((u) => u.email === params.email)) {
@@ -32,12 +29,9 @@ export class AuthService {
       params.password = bcrypt.hashSync(params.password, salt);
       // params.password = hash;
 
-      const user = await this.usersRepository.insert({
-        ...params,
-        ...{ password: params.password },
-      });
+      const user = await this.userModel.create({ ...params, ...{ password: params.password } });
 
-      return httpResponses.single('Sign up completed successfully!');
+      return httpResponses.single('Sign up completed successfully!', user);
     } catch (error) {
       throw error?.message ? error : httpErrors.serverError();
     }
@@ -45,14 +39,12 @@ export class AuthService {
 
   async login(params: loginUserDto) {
     try {
-      const user = await this.usersRepository
-        .findOne({
-          select: ['firstName', 'lastName', 'password', 'userName', 'email', 'id'],
-          where: [{ userName: params.userName }, { email: params.userName }],
-        });
+      const user = await this.userModel.findOne({
+        $or: [{ userName: params.userName }, { email: params.userName }],
+      }).lean();
 
       if (!user) {
-        throw httpErrors.badReq('User does not exists!');
+        throw httpErrors.badReq('User does not exists!')
       }
 
       if (!bcrypt.compareSync(params.password, user.password)) {
@@ -60,10 +52,10 @@ export class AuthService {
       }
 
       const token = this.createJwtToken(user);
-      return httpResponses.single('User logged in successfully!', {
-        ...user,
-        token,
-      });
+      console.log(token);
+      
+
+      return httpResponses.single('User logged in successfully!', { ...user, token });
     } catch (error) {
       throw error?.message ? error : httpErrors.serverError();
     }
@@ -71,7 +63,7 @@ export class AuthService {
 
   createJwtToken(user: any) {
     const payload = {
-      id: user.id,
+      id: user.id
     };
 
     return this.jwtService.sign(payload);

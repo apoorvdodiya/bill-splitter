@@ -27,10 +27,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('./pages/settings/settings.module').then((m) => m.SettingsModule),
       },
-      {
-        path: '**',
-        redirectTo: 'groups'
-      }
     ],
   },
 ];

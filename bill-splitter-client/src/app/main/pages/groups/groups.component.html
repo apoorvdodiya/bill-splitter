@@ -8,46 +8,23 @@
     </div>
   </div>
   <div class="search-box mt-3">
-    <input
-      type="text"
-      placeholder="Search"
-      #searchText
-      (keyup)="onSearch(searchText.value)"
-    />
+    <input type="text" placeholder="Search" />
     <button>
       <i class="fa fa-search fa-sm"></i>
     </button>
   </div>
   <div class="data-list-container">
-    <div class="data-list-item" *ngFor="let group of groups; let i = index">
+    <div class="data-list-item" *ngFor="let g of groups; let i = index">
       <div class="upper">
         <div class="card-column">
-          <span>{{ group?.name }}</span>
-          <!-- <span><i class="fa fa-rupee"></i> {{ group.totalAmount }}</span> -->
+          <span>{{ g?.name + i }}</span>
+          <span>+3476 INR</span>
         </div>
-        <div class="me-1" title="45 members">
-          <button class="btn btn-sm btn-flat pt-0" (click)="onExpand(i)">
-            <i
-              class="fa fa-lg"
-              [ngClass]="expanded === i ? 'fa-caret-up' : 'fa-caret-down'"
-            ></i>
-          </button>
-          {{ group.members.length }} <i class="fa fa-user"></i>
-        </div>
-      </div>
-      <div class="collapse" [ngClass]="expanded === i ? 'show' : ''">
-        <div class="bottom">
-          <div class="card-column">
-            <div *ngFor="let member of group.members">
-              {{ member?.firstName + " " + member?.lastName }}
-            </div>
-          </div>
-        </div>
+        <div class="me-1" title="45 members">45 <i class="fa fa-user"></i></div>
       </div>
     </div>
-    <div *ngIf="!groups.length">No records found</div>
   </div>
 </div>
 <div class="modal" tabindex="-1" #groupModalRef>
-  <app-add-edit-group (onClose)="getUserGroups()"></app-add-edit-group>
+  <app-add-edit-group></app-add-edit-group>
 </div>

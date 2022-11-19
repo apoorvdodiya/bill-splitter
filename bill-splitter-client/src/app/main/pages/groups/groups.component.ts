@@ -1,9 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Modal } from 'bootstrap';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { GroupService } from 'src/app/services/group.service';
 import { AddEditGroupComponent } from './components/add-edit-group/add-edit-group.component';
-import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-groups',
@@ -11,49 +8,30 @@ import swal from 'sweetalert2';
   styleUrls: ['./groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
-  constructor(
-    private groupService: GroupService,
-    private spinner: NgxSpinnerService
-  ) {}
-
+  constructor() {}
   @ViewChild('groupModalRef') groupModalRef: ElementRef;
   groupModal: Modal | null = null;
-  expanded = -1;
 
-  groups: any[] = [];
-  backUp: any[] = [];
-
-  ngOnInit(): void {
-    this.getUserGroups();
-  }
-
-  getUserGroups() {
-    this.spinner.show();
-    this.groupService.getUserGroups().subscribe(
-      (res) => {
-        this.spinner.hide();
-        this.backUp = res.data || [];
-        this.groups = res.data || [];
+  group = {
+    _id: '',
+    name: 'Group ',
+    members: [
+      {
+        name: 'Sunil Chauhan',
       },
-      (err) => {
-        this.spinner.hide();
-      }
-    );
+    ],
+  };
+  groups: any[] = [];
+  ngOnInit(): void {
+    // this.groups = Array(15)
+    for (const g of Array(15)) {
+      this.groups.push({ ...this.group })
+    }
   }
 
   onAdd() {
-    this.groupModal = new Modal(this.groupModalRef?.nativeElement, {});
-
+    this.groupModal = new Modal(this.groupModalRef?.nativeElement, {})
+    
     this.groupModal.show();
-  }
-
-  onExpand(index: number) {
-    this.expanded = this.expanded === index ? -1 : index;
-  }
-
-  onSearch(search: string) {
-    this.groups = this.backUp.filter((g) =>
-      (g.name as string).includes(search)
-    );
   }
 }

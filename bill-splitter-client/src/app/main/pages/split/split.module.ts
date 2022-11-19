@@ -5,22 +5,19 @@ import { SplitRoutingModule } from './split-routing.module';
 import { SplitComponent } from './split.component';
 import { AddEditSplitComponent } from './components/add-edit-split/add-edit-split.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SettleComponent } from './components/settle/settle.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     SplitComponent,
-    AddEditSplitComponent,
-    SettleComponent
+    AddEditSplitComponent
   ],
   imports: [
     CommonModule,
     SplitRoutingModule,
     NgSelectModule,
-    FormsModule,
-    ReactiveFormsModule
+    FormsModule
   ]
 })
 export class SplitModule { }

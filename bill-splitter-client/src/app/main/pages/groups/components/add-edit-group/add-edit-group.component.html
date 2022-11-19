@@ -7,16 +7,13 @@
         class="btn-close"
         data-bs-dismiss="modal"
         aria-label="Close"
-        #CloseModal
       ></button>
     </div>
     <div class="modal-body">
-      <div class="form-group my-2" [formGroup]="groupForm">
+      <div class="form-group my-2">
         <input
-          
           type="text"
-          name="name"
-          formControlName="name"
+          name="groupName"
           id="i-groupName"
           class="form-control"
           placeholder="Group name"
@@ -25,33 +22,20 @@
       <div class="form-group my-2">
         <ng-select
           class="form-control"
-          [placeholder]="selection.length ? '' : 'Select users'"
-          appearance="outline"
-          bindValue="id"
-          [multiple]="true"
+          placeholder="Select members"
+          [items]="users"
+          bindLabel="name"
+          bindValue="name"
           [(ngModel)]="selection"
-        >
-          <ng-option *ngFor="let user of users" [value]="user.id">
-            {{ user.firstName + " " + user.lastName }}
-          </ng-option>
-        </ng-select>
+          [multiple]="true"
+        ></ng-select>
       </div>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-outline-primary btn-sm"
-        data-bs-dismiss="modal"
-      >
+      <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">
         Close
       </button>
-      <button
-        type="button"
-        class="btn btn-outline-primary btn-sm"
-        (click)="onSave()"
-      >
-        Save
-      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm">Save</button>
     </div>
   </div>
 </div>

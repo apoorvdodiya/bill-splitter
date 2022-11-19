@@ -9,5 +9,5 @@ export class CreateGroupDto {
   @ApiProperty()
   @IsArray()
   // @MinLength(1)
-  members: number[];
+  members: string[];
 }
