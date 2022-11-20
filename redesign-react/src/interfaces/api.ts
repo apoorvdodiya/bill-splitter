@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export interface IRootState {
   api: IAPIState;
   auth: IAuthState;
@@ -11,4 +13,6 @@ export interface IAPIState {
 
 export interface IAuthState {
   isLoggedIn: boolean;
+  user: IUser;
+  token: string
 }

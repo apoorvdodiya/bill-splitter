@@ -1,7 +1,10 @@
 export const THEME = {
-  // bgPrimary: 'bg-slate-700'
+  headerHeight: '60px',
+  footerHeight: '60px',
   bgPrimary:
     "dark:bg-slate-700 dark:text-slate-300 bg-slate-300 text-slate-800  text-lg",
+  bgSecondary:
+    "dark:bg-slate-800 bg-slate-200",
   borderColor: "dark:border-slate-300 border-slate-800",
   // TODO ise recursively
   transparentControl: `bg-transparent border px-2 rounded-full dark:border-slate-300 border-slate-800 outline-none focus:dark:border-slate-400`,
