@@ -3,7 +3,7 @@ import { API } from "../redux/api-constant";
 import axios from "axios";
 import { Middleware } from "redux";
 import { IRootState } from "../interfaces/api";
-import { apiError, apiSuccess } from "../redux/slices/api";
+import { apiError, apiSuccess, request } from "../redux/slices/api";
 export const apiMiddleware: Middleware<{}, IRootState> =
   (store) => (next) => (action) => {
     next(action);
@@ -18,6 +18,7 @@ export const apiMiddleware: Middleware<{}, IRootState> =
         error: onError,
       } = action.payload;
 
+      store.dispatch(request());
       return new Promise((resolve, reject) => {
         axios({
           url,
@@ -28,7 +29,7 @@ export const apiMiddleware: Middleware<{}, IRootState> =
         })
           .then((res) => {
             store.dispatch(apiSuccess(res));
-            onSuccess && store.dispatch(onSuccess(res));
+            onSuccess && store.dispatch(onSuccess(res.data  ));
             resolve(res);
           })
           .catch((error) => {

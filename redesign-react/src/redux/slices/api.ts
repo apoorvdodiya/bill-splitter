@@ -9,7 +9,7 @@ export const apiSlice = createSlice({
     error: {},
   },
   reducers: {
-    request: (s, payload) => {
+    request: (s) => {
       s.isLoading = true;
     },
     apiSuccess: (s, payload) => {
@@ -23,5 +23,5 @@ export const apiSlice = createSlice({
   },
 });
 
-export const { apiSuccess, apiError } = apiSlice.actions;
+export const { apiSuccess, apiError, request } = apiSlice.actions;
 export default apiSlice.reducer;
