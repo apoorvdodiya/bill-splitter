@@ -19,8 +19,8 @@ export const Login = () => {
   const [errorMessage, setErrorMEssage] = useState("");
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/home", { replace: true });
-    }
+      navigate("/groups", { replace: true });
+    }    
   }, [isLoggedIn]);
 
   const dispatch = useDispatch();
@@ -85,7 +85,7 @@ export const Login = () => {
             />
           </div>
           <ErrorMessage error={loginForm.errors.password} />
-          <button type="submit" className={`${THEME.btnPrimary}`}>
+          <button type="submit" className={`${THEME.btnPrimarySquarish}`}>
             <InLineLoader show={isLoading} />
             Login
           </button>
