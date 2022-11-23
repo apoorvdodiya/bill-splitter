@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
+import { IAuthState } from "../../interfaces/api";
 
 export const authSlice = createSlice({
   name: "auth",

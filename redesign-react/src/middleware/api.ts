@@ -4,7 +4,7 @@ import axios from "axios";
 import { Middleware } from "redux";
 import { IRootState } from "../interfaces/api";
 import { apiError, apiSuccess, request } from "../redux/slices/api";
-export const apiMiddleware: Middleware<{}, IRootState> =
+export const apiMiddleware: Middleware<{}, any /* IRootState */> =
   (store) => (next) => (action) => {
     next(action);
 
@@ -17,6 +17,7 @@ export const apiMiddleware: Middleware<{}, IRootState> =
         success: onSuccess,
         error: onError,
       } = action.payload;
+      console.log(action.payload)
 
       store.dispatch(request());
       return new Promise((resolve, reject) => {

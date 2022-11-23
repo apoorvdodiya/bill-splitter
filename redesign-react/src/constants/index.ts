@@ -8,3 +8,13 @@ export const whileSpaceValidatory = (field: string = "") => {
       : "Must not be white space",
   } as TestConfig;
 };
+
+export const minArrayLengthValidatory = (
+  length: number,
+  field: string = ""
+) => {
+  return {
+    test: (value) => (value as any[])?.length >= length,
+    message: `Select at lease ${length} ${field || "item"}`,
+  } as TestConfig;
+};

@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Login } from "./pages/login";
 import { Home } from "./pages/home";
-import { Groups } from "./pages/groups";
+import { Groups } from "./pages/groups/groups";
 import { Layout } from './components/layout/index'
 import { AuthGuard } from './components/auth-guard'
 import { setSessionUser } from './redux/slices/auth';

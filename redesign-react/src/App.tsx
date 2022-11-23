@@ -5,8 +5,10 @@ import store from "./redux/store";
 import { BrowserRouter } from "react-router-dom";
 import { ApiRoutes } from "./routes";
 import { THEME } from "./constants/css";
+import { useAxiosInterceptors } from "./helpers/axios";
 
 function App() {
+  useAxiosInterceptors();
   return (
     <Provider store={store}>
       <BrowserRouter>

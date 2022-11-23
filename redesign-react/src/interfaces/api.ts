@@ -1,8 +1,10 @@
+import { IGroup } from "./group";
 import { IUser } from "./user";
-
 export interface IRootState {
   api: IAPIState;
   auth: IAuthState;
+  group: IGroupState;
+  user: IUserState;
 }
 
 export interface IAPIState {
@@ -14,5 +16,15 @@ export interface IAPIState {
 export interface IAuthState {
   isLoggedIn: boolean;
   user: IUser;
-  token: string
+  token: string;
+}
+
+export interface IGroupState {
+  userGroups: IGroup[];
+  userList: IUser[];
+  groupAdded: any
+}
+
+export interface IUserState {
+  allUsers: IUser[];
 }
