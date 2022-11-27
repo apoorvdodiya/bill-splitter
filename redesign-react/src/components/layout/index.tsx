@@ -12,6 +12,7 @@ export const Layout = ({ children }: IProps) => {
           <Header />
         </div>
         <div
+          className="overflow-auto"
           style={{
             height: `calc(100% - ${THEME.footerHeight} - ${THEME.headerHeight})`,
           }}

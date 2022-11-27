@@ -31,9 +31,9 @@ export const Groups = () => {
     dispatch(getGroupList());
   };
   return (
-    <div className="container mx-auto px-4 py-3">
+    <div className="container mx-auto px-4">
       <AddGroup show={groupModal} onModalClose={setGroupModal}></AddGroup>
-      <div className="flex justify-between items-center text-2xl">
+      <div className={`flex justify-between items-center text-2xl sticky top-0 py-3 ${THEME.bgPrimary}`}>
         <div className="flex">My Groups</div>
         <div className="flex items-center">
           <button className="" onClick={() => setGroupModal(true)}>
@@ -41,7 +41,7 @@ export const Groups = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col my-3">
+      <div className="flex flex-col mb-3">
         {groups?.length ? (
           groups.map((group) => {
             return (
@@ -53,7 +53,8 @@ export const Groups = () => {
                   <div>{group.name}</div>
                   <div>
                     {group.collapsed}
-                    <span
+                    <button
+                    type="button"
                       onClick={() =>
                         setCollapsed(
                           (group.id == collapsed ? 0 : group.id) || 0
@@ -65,7 +66,7 @@ export const Groups = () => {
                           group.id !== collapsed ? "down" : "up"
                         } fa-xl`}
                       ></i>
-                    </span>
+                    </button>
                     {/* <span className="mx-2">{group.members?.length}</span>
                     <i className="fa fa-user"></i> */}
                   </div>
@@ -76,7 +77,7 @@ export const Groups = () => {
                   <div className="max-h-24 scroll-auto overflow-auto">
                     {group.members?.map((member) => {
                       return (
-                        <div className="text-sm">
+                        <div className="text-sm" key={member.id}>
                           {member?.firstName} {member.lastName}
                         </div>
                       );
