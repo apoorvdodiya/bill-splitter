@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { THEME } from "../constants/css";
 import { whileSpaceValidatory } from "../constants/index";
 import { IRootState } from "../interfaces/api";
@@ -20,7 +20,7 @@ export const Login = () => {
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/groups", { replace: true });
-    }    
+    }
   }, [isLoggedIn]);
 
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ export const Login = () => {
         .test(whileSpaceValidatory("User name")),
       password: Yup.string()
         .required("Please enter password")
-        .test(whileSpaceValidatory("User name")),
+        .test(whileSpaceValidatory("Password")),
     }),
   });
 
@@ -90,6 +90,12 @@ export const Login = () => {
             Login
           </button>
           <ErrorMessage error={errorMessage} />
+          <div>
+            Don't have an Account?{" "}
+            <span className="cursor-pointer text-blue-500">
+              <Link to={'/sign-up'}>Sign Up</Link>
+            </span>
+          </div>
         </div>
       </form>
     </div>

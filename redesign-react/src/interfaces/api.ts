@@ -15,6 +15,7 @@ export interface IAPIState {
 
 export interface IAuthState {
   isLoggedIn: boolean;
+  userSignUp: any;
   user: IUser;
   token: string;
 }

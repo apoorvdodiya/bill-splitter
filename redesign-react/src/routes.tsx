@@ -6,6 +6,7 @@ import { Layout } from './components/layout/index'
 import { AuthGuard } from './components/auth-guard'
 import { setSessionUser } from './redux/slices/auth';
 import { useDispatch } from 'react-redux';
+import { SignUp } from './pages/signup';
 
 export const ApiRoutes = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ export const ApiRoutes = () => {
   return <Routes>
     <Route path='/' >
       <Route path='login' element={<Login />} />
+      <Route path='sign-up' element={<SignUp />} />
       <Route path='/' element={<AuthGuard><Layout /></AuthGuard>}>
         <Route path='home' element={<Home />} />
         <Route path='groups' element={<Groups />} />

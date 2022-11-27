@@ -1,10 +1,12 @@
-export const ErrorMessage = ({ error }: any) => {
+export const ErrorMessage = ({ form, control, error }: any) => {
   return (
     <div
       className="text-sm dark:text-red-300 text-red-600 mx-2"
-      style={{ height: "1.25rem" }}
+      style={{ minHeight: "1.25rem" }}
     >
-      {error || ""}
+      {form?.touched && form?.errors && control
+        ? form?.touched[control] && form?.errors[control]
+        : error || ""}
     </div>
   );
 };

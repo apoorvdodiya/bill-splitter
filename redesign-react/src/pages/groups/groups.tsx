@@ -88,7 +88,9 @@ export const Groups = () => {
             );
           })
         ) : (
-          <></>
+          <>
+            <div className="italic p-4">No groups found</div>
+          </>
         )}
       </div>
     </div>
