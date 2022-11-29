@@ -7,6 +7,7 @@ import { AuthGuard } from './components/auth-guard'
 import { setSessionUser } from './redux/slices/auth';
 import { useDispatch } from 'react-redux';
 import { SignUp } from './pages/signup';
+import { Splits } from './pages/split/split';
 
 export const ApiRoutes = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export const ApiRoutes = () => {
       <Route path='/' element={<AuthGuard><Layout /></AuthGuard>}>
         <Route path='home' element={<Home />} />
         <Route path='groups' element={<Groups />} />
+        <Route path='splits' element={<Splits />} />
         <Route path='*' element={<Navigate to="home" replace={true} />}></Route>
       </Route>
     </Route>

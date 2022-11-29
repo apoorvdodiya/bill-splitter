@@ -24,7 +24,7 @@ app.use(express.static(__dirname + '/build'));
 // app.use(forceSSL());
 
 app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/build'));
+  res.sendFile(path.join(__dirname + '/build/index.html'));
 });
 
 // Start the app by listening on the default

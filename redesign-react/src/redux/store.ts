@@ -4,12 +4,14 @@ import thunk from "redux-thunk";
 import apiReducer from "./slices/api";
 import authReducer from "./slices/auth";
 import groupReducer from "./slices/group";
+import splitReducer from "./slices/split";
 
 export default configureStore({
   reducer: {
     api: apiReducer,
     auth: authReducer,
     group: groupReducer,
+    split: splitReducer,
   },
   middleware: [thunk, apiMiddleware],
 });

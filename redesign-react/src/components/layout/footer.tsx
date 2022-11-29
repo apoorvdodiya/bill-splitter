@@ -12,7 +12,7 @@ export const Footer = () => {
       icon: "fa fa-bolt fa-lg",
       title: "Split",
       selected: false,
-      route: "#",
+      route: "splits",
     },
     {
       icon: "fa fa-cog fa-lg",

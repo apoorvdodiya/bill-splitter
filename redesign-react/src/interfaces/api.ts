@@ -1,10 +1,12 @@
 import { IGroup } from "./group";
+import { ISplit } from "./split";
 import { IUser } from "./user";
 export interface IRootState {
   api: IAPIState;
   auth: IAuthState;
   group: IGroupState;
   user: IUserState;
+  split: ISplitState;
 }
 
 export interface IAPIState {
@@ -23,9 +25,16 @@ export interface IAuthState {
 export interface IGroupState {
   userGroups: IGroup[];
   userList: IUser[];
-  groupAdded: any
+  groupAdded: any;
 }
 
 export interface IUserState {
   allUsers: IUser[];
+}
+
+export interface ISplitState {
+  userGroups: IGroup[];
+  userList: IUser[];
+  addedSplit: any;
+  userSplits: ISplit[];
 }
