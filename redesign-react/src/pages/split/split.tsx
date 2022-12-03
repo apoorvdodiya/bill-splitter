@@ -5,6 +5,7 @@ import { IRootState } from "../../interfaces/api";
 import { ISplit } from "../../interfaces/split";
 import { getSplitList } from "../../redux/actions/split";
 import { AddSplit } from "./components/add-split";
+import { SettleForm } from "./components/settle-form";
 // import { AddSplit } from "./components/add-split";
 
 export const Splits = () => {
@@ -12,20 +13,32 @@ export const Splits = () => {
   const splits = useSelector<IRootState, ISplit[]>((s) => s.split.userSplits);
   const [collapsed, setCollapsed] = useState<number | undefined>(0);
   const [splitModal, setSplitModal] = useState<boolean>(false);
+  const [settleModal, setSettleModal] = useState<boolean>(false);
+  const [settleMeta, setSettleMeta] = useState<any>(null);
   const [tab, setTab] = useState<string>("paid");
 
   useEffect(() => {
-    !splitModal && getUserSplits();
-  }, [splitModal, tab]);
+    !(splitModal || settleModal) && getUserSplits();
+  }, [splitModal, tab, settleModal]);
 
   const getSplitCardByTab = () => {};
 
   const getUserSplits = () => {
     dispatch(getSplitList(tab));
   };
+
+  const onSettle = (splitter: any, split: any, type: "settle" | "deposit") => {
+    setSettleMeta({ split, splitter, type });
+    setSettleModal(true);
+  };
   return (
     <div className="container mx-auto px-4">
       <AddSplit show={splitModal} onModalClose={setSplitModal}></AddSplit>
+      <SettleForm
+        show={settleModal}
+        onModalClose={setSettleModal}
+        meta={settleMeta}
+      ></SettleForm>
       <div
         className={`flex justify-between items-center text-2xl sticky top-0 py-3 ${THEME.bgPrimary}`}
       >
@@ -113,7 +126,14 @@ export const Splits = () => {
                                   {tab === "settled" ? (
                                     <span className="italic">SETTLED</span>
                                   ) : (
-                                    <button className="bold">DEPOSIT</button>
+                                    <button
+                                      className="bold"
+                                      onClick={() =>
+                                        onSettle(splitter, split, "deposit")
+                                      }
+                                    >
+                                      DEPOSIT
+                                    </button>
                                   )}
                                 </td>
                               </tr>
@@ -159,7 +179,18 @@ export const Splits = () => {
                       <div>
                         {/* TODO */}
                         {split.collapsed}
-                        <button>SETTLE</button>
+                        <button
+                          typeof="button"
+                          onClick={() =>
+                            onSettle(
+                              split?.splitters?.length && split?.splitters[0],
+                              split,
+                              "settle"
+                            )
+                          }
+                        >
+                          SETTLE
+                        </button>
                       </div>
                     </div>
                   </div>

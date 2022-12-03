@@ -5,6 +5,7 @@ import {
   AUTH_URL,
   GROUP_URL,
   SPLIT_URL,
+  PATCH,
 } from "../api-constant";
 import { login } from "../slices/auth";
 import { getAllUsers, getUserGroups, getUserSplits, splitCreated } from "../slices/split";
@@ -41,6 +42,16 @@ export const addSplit = (data: any) => ({
   payload: {
     url: `${SPLIT_URL}`,
     method: POST,
+    data,
+    success: splitCreated,
+  },
+});
+
+export const settle = (splitterId: number, data: any, type: 'payee' | 'borrower') => ({
+  type: API,
+  payload: {
+    url: `${SPLIT_URL}/settle/${type}/${splitterId}`,
+    method: PATCH,
     data,
     success: splitCreated,
   },
