@@ -24,3 +24,14 @@ export interface ISplitter {
   user?: IUser;
   userId?: number;
 } 
+
+export interface ISplitterPayload {
+  id?: number;
+  amount?: number;
+  groupId?: number;
+  paidAmount?: number;
+  ration?: number;
+  splitId?: number;
+  member?: IUser;
+  userId?: number;
+} 

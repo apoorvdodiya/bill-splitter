@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { THEME } from "../../constants/css";
 import { IRootState } from "../../interfaces/api";
-import { IGroup } from "../../interfaces/group";
 import { ISplit } from "../../interfaces/split";
 import { getSplitList } from "../../redux/actions/split";
+import { AddSplit } from "./components/add-split";
 // import { AddSplit } from "./components/add-split";
 
 export const Splits = () => {
@@ -18,14 +18,6 @@ export const Splits = () => {
     !splitModal && getUserSplits();
   }, [splitModal, tab]);
 
-  useEffect(() => {
-    console.log("groups", splits);
-  }, [splits]);
-
-  const collapseSplit = (split: IGroup) => {
-    split.collapsed = !split.collapsed;
-  };
-
   const getSplitCardByTab = () => {};
 
   const getUserSplits = () => {
@@ -33,7 +25,7 @@ export const Splits = () => {
   };
   return (
     <div className="container mx-auto px-4">
-      {/* <AddSplit show={groupModal} onModalClose={setGroupModal}></AddSplit> */}
+      <AddSplit show={splitModal} onModalClose={setSplitModal}></AddSplit>
       <div
         className={`flex justify-between items-center text-2xl sticky top-0 py-3 ${THEME.bgPrimary}`}
       >
@@ -89,8 +81,6 @@ export const Splits = () => {
                             } fa-xl`}
                           ></i>
                         </button>
-                        {/* <span className="mx-2">{group.members?.length}</span>
-                        <i className="fa fa-user"></i> */}
                       </div>
                     </div>
                     {split.id !== collapsed ? (

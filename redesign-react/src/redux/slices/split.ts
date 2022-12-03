@@ -13,7 +13,7 @@ export const splitSlice = createSlice({
       s.userSplits = action.payload.data;
     },
     getUserGroups: (s, action) => {
-      s.userSplits = action.payload.data;
+      s.userGroups = action.payload.data;
     },
     getAllUsers: (s, action) => {
       s.userList = action.payload.data;
