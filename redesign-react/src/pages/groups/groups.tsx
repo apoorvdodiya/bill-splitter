@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ListLoader } from "../../components/loader/list-loader";
 import { Modal } from "../../components/modal/modal";
 import { THEME } from "../../constants/css";
 import { IRootState } from "../../interfaces/api";
@@ -9,6 +10,7 @@ import { getGroupList } from "../../redux/actions/group";
 import { AddGroup } from "./components/add-group";
 
 export const Groups = () => {
+  const isLoading = useSelector<IRootState, boolean>((s) => s?.api?.isLoading);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector<IRootState, boolean>((s) => s.auth.isLoggedIn);
   const groups = useSelector<IRootState, IGroup[]>((s) => s.group.userGroups);
@@ -33,7 +35,9 @@ export const Groups = () => {
   return (
     <div className="container mx-auto px-4">
       <AddGroup show={groupModal} onModalClose={setGroupModal}></AddGroup>
-      <div className={`flex justify-between items-center text-2xl sticky top-0 py-3 ${THEME.bgPrimary}`}>
+      <div
+        className={`flex justify-between items-center text-2xl sticky top-0 py-3 ${THEME.bgPrimary}`}
+      >
         <div className="flex">My Groups</div>
         <div className="flex items-center">
           <button className="" onClick={() => setGroupModal(true)}>
@@ -42,54 +46,60 @@ export const Groups = () => {
         </div>
       </div>
       <div className="flex flex-col mb-3">
-        {groups?.length ? (
-          groups.map((group) => {
-            return (
-              <div
-                className={`card p-3 rounded-lg ${THEME.bgSecondary} ${THEME.borderDarkerColor}`}
-                key={group.id}
-              >
-                <div className={`flex justify-between`}>
-                  <div>{group.name}</div>
-                  <div>
-                    {group.collapsed}
-                    <button
-                    type="button"
-                      onClick={() =>
-                        setCollapsed(
-                          (group.id == collapsed ? 0 : group.id) || 0
-                        )
-                      }
-                    >
-                      <i
-                        className={`fas fa-chevron-${
-                          group.id !== collapsed ? "down" : "up"
-                        } fa-xl`}
-                      ></i>
-                    </button>
-                    {/* <span className="mx-2">{group.members?.length}</span>
-                    <i className="fa fa-user"></i> */}
-                  </div>
-                </div>
-                {group.id !== collapsed ? (
-                  <></>
-                ) : (
-                  <div className="max-h-24 scroll-auto overflow-auto">
-                    {group.members?.map((member) => {
-                      return (
-                        <div className="text-sm" key={member.id}>
-                          {member?.firstName} {member.lastName}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          })
+        {isLoading ? (
+          <ListLoader show={isLoading} />
         ) : (
           <>
-            <div className="italic p-4">No groups found</div>
+            {groups?.length ? (
+              groups.map((group) => {
+                return (
+                  <div
+                    className={`card p-3 rounded-lg ${THEME.bgSecondary} ${THEME.borderDarkerColor}`}
+                    key={group.id}
+                  >
+                    <div className={`flex justify-between`}>
+                      <div>{group.name}</div>
+                      <div>
+                        {group.collapsed}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setCollapsed(
+                              (group.id == collapsed ? 0 : group.id) || 0
+                            )
+                          }
+                        >
+                          <i
+                            className={`fas fa-chevron-${
+                              group.id !== collapsed ? "down" : "up"
+                            } fa-xl`}
+                          ></i>
+                        </button>
+                        {/* <span className="mx-2">{group.members?.length}</span>
+                    <i className="fa fa-user"></i> */}
+                      </div>
+                    </div>
+                    {group.id !== collapsed ? (
+                      <></>
+                    ) : (
+                      <div className="max-h-24 scroll-auto overflow-auto">
+                        {group.members?.map((member) => {
+                          return (
+                            <div className="text-sm" key={member.id}>
+                              {member?.firstName} {member.lastName}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <>
+                <div className="italic p-4">No groups found</div>
+              </>
+            )}
           </>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ListLoader } from "../../components/loader/list-loader";
 import { THEME } from "../../constants/css";
 import { IRootState } from "../../interfaces/api";
 import { ISplit } from "../../interfaces/split";
@@ -9,6 +10,7 @@ import { SettleForm } from "./components/settle-form";
 // import { AddSplit } from "./components/add-split";
 
 export const Splits = () => {
+  const isLoading = useSelector<IRootState, boolean>((s) => s?.api?.isLoading);
   const dispatch = useDispatch();
   const splits = useSelector<IRootState, ISplit[]>((s) => s.split.userSplits);
   const [collapsed, setCollapsed] = useState<number | undefined>(0);
@@ -66,146 +68,154 @@ export const Splits = () => {
         </div>
       </div>
       <div className="flex flex-col mb-3">
-        {splits?.length ? (
-          splits.map((split) => {
-            switch (tab) {
-              case "paid":
-              case "settled":
-                return (
-                  <div
-                    className={`card p-3 rounded-lg ${THEME.bgSecondary} ${THEME.borderDarkerColor}`}
-                    key={split.id}
-                  >
-                    <div className={`flex justify-between`}>
-                      <div>{split.title}</div>
-                      <div>
-                        {split.collapsed}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setCollapsed(
-                              (split.id == collapsed ? 0 : split.id) || 0
-                            )
-                          }
-                        >
-                          <span className="mx-2">
-                            <i className="fa fa-rupee-sign"></i>{" "}
-                            {split.totalAmount}
-                          </span>
-                          <i
-                            className={`fas fa-chevron-${
-                              split.id !== collapsed ? "down" : "up"
-                            } fa-xl`}
-                          ></i>
-                        </button>
-                      </div>
-                    </div>
-                    {split.id !== collapsed ? (
-                      <></>
-                    ) : (
-                      <table
-                        border={1}
-                        className="table-auto w-full max-h-24 scroll-auto overflow-auto"
-                      >
-                        <tbody>
-                          {split.splitters?.map((splitter) => {
-                            return (
-                              <tr
-                                className="flex justify-between text-sm"
-                                key={splitter.id}
-                              >
-                                <td className="w-1/4">
-                                  {splitter?.user?.firstName}{" "}
-                                  {splitter?.user?.lastName}
-                                </td>
-                                <td className="">
-                                  <i className="fa fa-rupee-sign"></i>{" "}
-                                  {splitter.amount
-                                    ? splitter.paidAmount
-                                      ? splitter.amount - splitter.paidAmount
-                                      : splitter.amount
-                                    : 0}
-                                </td>
-                                <td className="">
-                                  {tab === "settled" ? (
-                                    <span className="italic">SETTLED</span>
-                                  ) : (
-                                    <button
-                                      className="bold"
-                                      onClick={() =>
-                                        onSettle(splitter, split, "deposit")
-                                      }
-                                    >
-                                      DEPOSIT
-                                    </button>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-                );
-              case "owed":
-                return (
-                  <div
-                    className={`card p-3 rounded-lg ${THEME.bgSecondary} ${THEME.borderDarkerColor}`}
-                    key={split.id}
-                  >
-                    <div className={`flex justify-between`}>
-                      <div>{split.title}</div>
-                      <div>
-                        {split.collapsed}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setCollapsed(
-                              (split.id == collapsed ? 0 : split.id) || 0
-                            )
-                          }
-                        >
-                          <span className="">
-                            <i className="fa fa-rupee-sign"></i>{" "}
-                            {split?.splitters &&
-                              split?.splitters[0] &&
-                              split.splitters[0].amount}
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div className={`flex justify-between text-sm`}>
-                      <div>
-                        Created by {split.createdBy?.firstName}{" "}
-                        {split.createdBy?.lastName}
-                      </div>
-                      <div>
-                        {/* TODO */}
-                        {split.collapsed}
-                        <button
-                          typeof="button"
-                          onClick={() =>
-                            onSettle(
-                              split?.splitters?.length && split?.splitters[0],
-                              split,
-                              "settle"
-                            )
-                          }
-                        >
-                          SETTLE
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              default:
-                return <></>;
-            }
-          })
+        {isLoading ? (
+          <ListLoader show={isLoading} />
         ) : (
           <>
-            <div className="italic p-4">No data found</div>
+            {splits?.length ? (
+              splits.map((split) => {
+                switch (tab) {
+                  case "paid":
+                  case "settled":
+                    return (
+                      <div
+                        className={`card p-3 rounded-lg ${THEME.bgSecondary} ${THEME.borderDarkerColor}`}
+                        key={split.id}
+                      >
+                        <div className={`flex justify-between`}>
+                          <div>{split.title}</div>
+                          <div>
+                            {split.collapsed}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setCollapsed(
+                                  (split.id == collapsed ? 0 : split.id) || 0
+                                )
+                              }
+                            >
+                              <span className="mx-2">
+                                <i className="fa fa-rupee-sign"></i>{" "}
+                                {split.totalAmount}
+                              </span>
+                              <i
+                                className={`fas fa-chevron-${
+                                  split.id !== collapsed ? "down" : "up"
+                                } fa-xl`}
+                              ></i>
+                            </button>
+                          </div>
+                        </div>
+                        {split.id !== collapsed ? (
+                          <></>
+                        ) : (
+                          <table
+                            border={1}
+                            className="table-auto w-full max-h-24 scroll-auto overflow-auto"
+                          >
+                            <tbody>
+                              {split.splitters?.map((splitter) => {
+                                return (
+                                  <tr
+                                    className="flex justify-between text-sm"
+                                    key={splitter.id}
+                                  >
+                                    <td className="w-1/4">
+                                      {splitter?.user?.firstName}{" "}
+                                      {splitter?.user?.lastName}
+                                    </td>
+                                    <td className="">
+                                      <i className="fa fa-rupee-sign"></i>{" "}
+                                      {splitter.amount
+                                        ? splitter.paidAmount
+                                          ? splitter.amount -
+                                            splitter.paidAmount
+                                          : splitter.amount
+                                        : 0}
+                                    </td>
+                                    <td className="">
+                                      {tab === "settled" ? (
+                                        <span className="italic">SETTLED</span>
+                                      ) : (
+                                        <button
+                                          className="bold"
+                                          onClick={() =>
+                                            onSettle(splitter, split, "deposit")
+                                          }
+                                        >
+                                          DEPOSIT
+                                        </button>
+                                      )}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        )}
+                      </div>
+                    );
+                  case "owed":
+                    return (
+                      <div
+                        className={`card p-3 rounded-lg ${THEME.bgSecondary} ${THEME.borderDarkerColor}`}
+                        key={split.id}
+                      >
+                        <div className={`flex justify-between`}>
+                          <div>{split.title}</div>
+                          <div>
+                            {split.collapsed}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setCollapsed(
+                                  (split.id == collapsed ? 0 : split.id) || 0
+                                )
+                              }
+                            >
+                              <span className="">
+                                <i className="fa fa-rupee-sign"></i>{" "}
+                                {split?.splitters &&
+                                  split?.splitters[0] &&
+                                  split.splitters[0].amount}
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                        <div className={`flex justify-between text-sm`}>
+                          <div>
+                            Created by {split.createdBy?.firstName}{" "}
+                            {split.createdBy?.lastName}
+                          </div>
+                          <div>
+                            {/* TODO */}
+                            {split.collapsed}
+                            <button
+                              typeof="button"
+                              onClick={() =>
+                                onSettle(
+                                  split?.splitters?.length &&
+                                    split?.splitters[0],
+                                  split,
+                                  "settle"
+                                )
+                              }
+                            >
+                              SETTLE
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  default:
+                    return <></>;
+                }
+              })
+            ) : (
+              <>
+                <div className="italic p-4">No data found</div>
+              </>
+            )}
           </>
         )}
       </div>
