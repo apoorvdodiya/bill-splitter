@@ -33,12 +33,16 @@ export const Splits = () => {
   };
   return (
     <div className="container mx-auto px-4">
-      <AddSplit show={splitModal} onModalClose={setSplitModal}></AddSplit>
-      <SettleForm
-        show={settleModal}
-        onModalClose={setSettleModal}
-        meta={settleMeta}
-      ></SettleForm>
+      {splitModal && (
+        <AddSplit show={splitModal} onModalClose={setSplitModal}></AddSplit>
+      )}
+      {settleModal && (
+        <SettleForm
+          show={settleModal}
+          onModalClose={setSettleModal}
+          meta={settleMeta}
+        ></SettleForm>
+      )}
       <div
         className={`flex justify-between items-center text-2xl sticky top-0 py-3 ${THEME.bgPrimary}`}
       >

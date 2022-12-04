@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { THEME } from "../../constants/css";
+import { IRootState } from "../../interfaces/api";
+import { InLineLoader } from "../loader/inline-loader";
 
 export const Modal = (props: any) => {
+  const isLoading = useSelector<IRootState, boolean>((s) => s?.api?.isLoading);
   return (
     <>
       {props.show && (
@@ -46,7 +50,8 @@ export const Modal = (props: any) => {
                   className={THEME.btnPrimarySquarish}
                   onClick={() => props.onModalSubmit()}
                 >
-                  {props.submitText || 'Save'}
+                  <InLineLoader show={isLoading} />
+                  {props.submitText || "Save"}
                 </button>
               </div>
             </div>

@@ -52,13 +52,14 @@ export const SettleForm = (props: any) => {
           >
             <div className="w-full text-center">
               <input
-                className={`${THEME.transparentControl} w-1/3`}
+                className={`${THEME.transparentControl} w-1/3 text-center`}
                 type="number"
                 name="amount"
                 id="iAmount"
                 placeholder="0"
                 onChange={settleForm.handleChange}
                 value={settleForm.values.amount}
+                autoFocus  
               />
             </div>
             <ErrorMessage form={settleForm} control={"amount"} />

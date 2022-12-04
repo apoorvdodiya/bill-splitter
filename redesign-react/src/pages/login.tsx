@@ -69,10 +69,11 @@ export const Login = () => {
               id="iUsername"
               placeholder="User name"
               onChange={loginForm.handleChange}
+              onBlur={loginForm.handleBlur}
               value={loginForm.values.userName}
             />
           </div>
-          <ErrorMessage error={loginForm.errors.userName} />
+          <ErrorMessage form={loginForm} control={"userName"} />
           <div>
             <input
               className={`${THEME.transparentControl}`}
@@ -81,10 +82,11 @@ export const Login = () => {
               id="iPassword"
               placeholder="Password"
               onChange={loginForm.handleChange}
+              onBlur={loginForm.handleBlur}
               value={loginForm.values.password}
             />
           </div>
-          <ErrorMessage error={loginForm.errors.password} />
+          <ErrorMessage form={loginForm} control={"password"} />
           <button type="submit" className={`${THEME.btnPrimarySquarish}`}>
             <InLineLoader show={isLoading} />
             Login
@@ -93,7 +95,7 @@ export const Login = () => {
           <div>
             Don't have an Account?{" "}
             <span className="cursor-pointer text-blue-500">
-              <Link to={'/sign-up'}>Sign Up</Link>
+              <Link to={"/sign-up"}>Sign Up</Link>
             </span>
           </div>
         </div>

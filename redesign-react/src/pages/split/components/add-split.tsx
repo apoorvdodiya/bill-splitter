@@ -174,10 +174,12 @@ export const AddSplit = (props: any) => {
                 id="iTitle"
                 placeholder="Title"
                 onChange={splitForm.handleChange}
+                onBlur={splitForm.handleBlur}
                 value={splitForm.values.title}
+                autoFocus  
               />
             </div>
-            <ErrorMessage error={splitForm.errors.title} />
+            <ErrorMessage form={splitForm} control="title" />
             <div className="w-full">
               <Select
                 className="w-full"
@@ -195,10 +197,10 @@ export const AddSplit = (props: any) => {
                 onChange={async (value) => {
                   await setGroup(value?.value || 0);
                 }}
+                onBlur={splitForm.handleBlur}
                 // value={groupForm.values.members}
                 name="selectedGroup"
                 isSearchable={true}
-                autoFocus={true}
                 options={
                   groupList && groupList.length
                     ? groupList.map((g) => ({
@@ -209,7 +211,7 @@ export const AddSplit = (props: any) => {
                 }
               />
             </div>
-            <ErrorMessage error={splitForm.errors.selectedGroup} />
+            <ErrorMessage form={splitForm} control="selectedGroup" />
             <div className="w-full">
               <input
                 className={`${THEME.transparentControl} w-full`}
@@ -218,10 +220,11 @@ export const AddSplit = (props: any) => {
                 id="iTotalAmount"
                 placeholder="Amount"
                 onChange={(e) => setTotalAmount(+e.target.value)}
+                onBlur={splitForm.handleBlur}
                 value={splitForm.values.totalAmount}
               />
             </div>
-            <ErrorMessage error={splitForm.errors.totalAmount} />
+            <ErrorMessage form={splitForm} control="totalAmount" />
             <div className="w-full">
               <input
                 className={`${THEME.transparentControl} w-full`}
@@ -230,10 +233,11 @@ export const AddSplit = (props: any) => {
                 id="iDescription"
                 placeholder="Description"
                 onChange={splitForm.handleChange}
+                onBlur={splitForm.handleBlur}
                 value={splitForm.values.description}
               />
             </div>
-            <ErrorMessage error={splitForm.errors.description} />
+            <ErrorMessage form={splitForm} control="description" />
             {splitForm?.values?.splitters?.length ? (
               <table className="table table-auto w-full">
                 <thead>
