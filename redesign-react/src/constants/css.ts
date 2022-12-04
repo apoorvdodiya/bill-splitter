@@ -45,6 +45,15 @@ export const COMPONENT = {
       marginBottom: 0,
       padding: 0,
     }),
+    singleValue: (base: any) => ({
+      ...base,
+      backgroundColor: "transparent",
+      color: "inherit",
+      margin: 0,
+      padding: 0,
+      fontSize: "80%",
+      lineHeight: "140%",
+    }),
     multiValueLabel: (base: any) => ({
       ...base,
       backgroundColor: "transparent",

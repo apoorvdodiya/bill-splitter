@@ -68,10 +68,11 @@ export const AddGroup = (props: any) => {
                 id="iName"
                 placeholder="Group name"
                 onChange={groupForm.handleChange}
+                onBlur={groupForm.handleBlur}
                 value={groupForm.values.name}
               />
             </div>
-            <ErrorMessage error={groupForm.errors.name} />
+            <ErrorMessage form={groupForm} control="name" />
             <div className="w-full">
               <Select
                 className="w-full"
@@ -86,6 +87,7 @@ export const AddGroup = (props: any) => {
                 })}
                 placeholder="Select members"
                 styles={COMPONENT.reactSelect}
+                onBlur={groupForm.handleBlur}
                 onChange={(value) => {
                   groupForm.setValues({
                     ...groupForm.values,
@@ -107,7 +109,7 @@ export const AddGroup = (props: any) => {
                 }
               />
             </div>
-            <ErrorMessage error={groupForm.errors.members} />
+            <ErrorMessage form={groupForm} control="members" />
           </form>
         </Modal>
       )}
