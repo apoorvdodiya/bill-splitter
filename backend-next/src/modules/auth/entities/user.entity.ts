@@ -19,4 +19,10 @@ export class User {
 
   @Column({ select: false })
   password: string;
+
+  @Column({ default: false })
+  isVerified: boolean;
+
+  @Column({ nullable: true })
+  code: string;
 }

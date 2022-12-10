@@ -3,6 +3,7 @@ import { CommonService } from './common.service';
 import { MailService } from './mail/mail.service';
 
 @Module({
-  providers: [CommonService, MailService]
+  providers: [CommonService, MailService],
+  exports: [MailService]
 })
-export class CommonModule {}
+export class CommonModule { }

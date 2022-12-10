@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { loginUserDto, SignUpUserDto } from './dto/user.dto';
+import { loginUserDto, SignUpUserDto, VerifyUserDto } from './dto/user.dto';
 
 @UsePipes(new ValidationPipe({ transform: true }))
 @ApiTags('Auth')
@@ -23,5 +23,10 @@ export class AuthController {
   @Post('login')
   async login(@Body() params: loginUserDto) {
     return this.authService.login(params);
+  }
+
+  @Post('verify')
+  async verify(@Body() params: VerifyUserDto) {
+    return this.authService.verify(params);
   }
 }

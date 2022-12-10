@@ -39,3 +39,15 @@ export class loginUserDto {
   @IsString()
   password: string;
 }
+
+export class VerifyUserDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  userName: string;
+  
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  code: string;
+}
