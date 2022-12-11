@@ -7,13 +7,13 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { loginUserDto, SignUpUserDto, VerifyUserDto } from './dto/user.dto';
+import { loginUserDto, ResetPasswordDto, SignUpUserDto, UserNameDto, VerifyUserDto } from './dto/user.dto';
 
 @UsePipes(new ValidationPipe({ transform: true }))
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @Post('sign-up')
   async signUp(@Body() params: SignUpUserDto) {
@@ -28,5 +28,15 @@ export class AuthController {
   @Post('verify')
   async verify(@Body() params: VerifyUserDto) {
     return this.authService.verify(params);
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() params: UserNameDto) {
+    return this.authService.forgotPassword(params);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() params: ResetPasswordDto) {
+    return this.authService.resetPassword(params);
   }
 }

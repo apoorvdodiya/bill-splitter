@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { httpErrors } from 'src/helpers/errors';
 import { httpResponses } from 'src/helpers/response';
-import { loginUserDto, SignUpUserDto, VerifyUserDto } from './dto/user.dto';
+import { loginUserDto, ResetPasswordDto, SignUpUserDto, UserNameDto, VerifyUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
@@ -31,12 +31,11 @@ export class AuthService {
         throw httpErrors.badReq('Username is already used');
       }
 
-      const salt = bcrypt.genSaltSync(10);
-      params.password = bcrypt.hashSync(params.password, salt);
+      params.password = this.encodePassword(params.password)
       // params.password = hash;
 
       const verifyUrl = process.env.CLIENT_URL;
-      const code = randomBytes(3).toString('hex').toUpperCase();
+      const code = this.generateCode();
       const user = await this.usersRepository.insert({
         ...params,
         ...{
@@ -116,6 +115,88 @@ export class AuthService {
     } catch (error) {
       throw error?.message ? error : httpErrors.serverError();
     }
+  }
+
+  async forgotPassword(params: UserNameDto) {
+    try {
+      const user = await this.usersRepository
+        .findOne({
+          where: [
+            { userName: params.userName },
+            { email: params.userName }
+          ],
+        });
+
+      if (!user) {
+        throw httpErrors.badReq('User does not exists!');
+      }
+
+      const code = this.generateCode(4);
+      await this.usersRepository.update({
+        id: user.id
+      },
+        {
+          code: code || '123'
+        })
+      this.mailService.sendSingleEmail({
+        from: process.env.MAILER_EMAIL,
+        to: user.email,
+        subject: "Reset password requested",
+        html: `
+            Use this code to reset your password: ${code}
+          `
+      })
+
+      return httpResponses.single('Reset password code is sent successfully!');
+    } catch (error) {
+      throw error?.message ? error : httpErrors.serverError();
+    }
+  }
+
+  async resetPassword(params: ResetPasswordDto) {
+    try {
+      const user = await this.usersRepository
+        .findOne({
+          where: [
+            { userName: params.userName },
+            { email: params.userName }
+          ],
+        });
+
+
+      if (!user) {
+        throw httpErrors.badReq('User does not exists!');
+      } else if (user.code !== params.code) {
+        throw httpErrors.badReq('Invalid reset code!');
+      }
+
+      await this.usersRepository.update({
+        id: user.id
+      },
+        {
+          code: null,
+          password: this.encodePassword(params.newPassword)
+        })
+      this.mailService.sendSingleEmail({
+        from: process.env.MAILER_EMAIL,
+        to: user.email,
+        subject: "Alert! Your password was changed",
+        html: `Your password was changed`
+
+      })
+      return httpResponses.single('Password reset successfully!');
+    } catch (error) {
+      throw error?.message ? error : httpErrors.serverError();
+    }
+  }
+
+  generateCode(bytes = 3) {
+    return randomBytes(bytes).toString('hex').toUpperCase();
+  }
+
+  encodePassword(password: string) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
   }
 
   createJwtToken(user: any) {
