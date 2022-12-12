@@ -69,17 +69,18 @@ export class AuthService {
       if (!user) {
         throw httpErrors.badReq('User does not exists!');
       }
-      delete user.password;
       if (!user.isVerified) {
+        delete user.password;
         return httpResponses.single('User not verified!', {
           ...user
         })
       }
-
+      
       if (!bcrypt.compareSync(params.password, user.password)) {
         throw httpErrors.badReq('Invalid user credentials');
       }
-
+      
+      delete user.password;
       const token = this.createJwtToken(user);
       return httpResponses.single('User logged in successfully!', {
         ...user,
