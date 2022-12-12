@@ -1,3 +1,4 @@
+import { string } from "yup";
 import { IGroup } from "./group";
 import { ISplit } from "./split";
 import { IUser } from "./user";
@@ -16,6 +17,7 @@ export interface IAPIState {
 }
 
 export interface IAuthState {
+  isNotVerified: boolean;
   isLoggedIn: boolean;
   userSignUp: any;
   user: IUser;
@@ -37,4 +39,10 @@ export interface ISplitState {
   userList: IUser[];
   addedSplit: any;
   userSplits: ISplit[];
+}
+
+export interface IResetPassword {
+  userName: string;
+  code: string;
+  newPassword: string;
 }

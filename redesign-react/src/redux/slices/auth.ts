@@ -8,19 +8,30 @@ export const authSlice = createSlice({
     user: {},
     isLoggedIn: false,
     userSignUp: null,
+    isNotVerified: false
   },
   reducers: {
     login: (s, action) => {
-      localStorage.setItem("user", JSON.stringify(action?.payload?.data || {}));
-      localStorage.setItem("token", action.payload?.data?.token);
-      s.token = action.payload.data?.token;
-      s.user = action.payload.data;
-      s.isLoggedIn = true;
+      const data = action.payload?.data;
+      console.log(data)
+      if (!data.isVerified) {
+        s.user = data;
+        s.isNotVerified = true;
+      } else {
+        localStorage.setItem("user", JSON.stringify(data || {}));
+        localStorage.setItem("token", data?.token);
+        s.token = action.payload.data?.token;
+        s.user = data;
+        s.isLoggedIn = true;
+      }
+    },
+    verify: (s, action) => {
+      s.isNotVerified = false;
     },
     signUp: (s, action) => {
       console.log(action);
       s.userSignUp = action.payload;
-      
+
     },
     logout: (s) => {
       localStorage.clear();
@@ -35,8 +46,12 @@ export const authSlice = createSlice({
       s.user = data ? JSON.parse(data) : {};
       s.isLoggedIn = Boolean(token && data);
     },
+    forgotPassword: (s, action) => {
+    },
+    resetPassword: (s, action) => {
+    },
   },
 });
 
-export const { login, signUp, setSessionUser, logout } = authSlice.actions;
+export const { login, verify, signUp, setSessionUser, logout } = authSlice.actions;
 export default authSlice.reducer;

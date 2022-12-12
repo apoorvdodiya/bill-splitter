@@ -68,9 +68,11 @@ export class AuthService {
 
       if (!user) {
         throw httpErrors.badReq('User does not exists!');
-      } else if (!user.isVerified) {
-        throw httpErrors.badReq('User not verified', {
-          data: user
+      }
+      delete user.password;
+      if (!user.isVerified) {
+        return httpResponses.single('User not verified!', {
+          ...user
         })
       }
 

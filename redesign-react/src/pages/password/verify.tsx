@@ -1,53 +1,53 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { THEME } from "../constants/css";
-import { whileSpaceValidatory } from "../constants/index";
-import { IRootState } from "../interfaces/api";
-import { doLogin, dummyLogin } from "../redux/actions/auth";
+import { THEME } from "../../constants/css";
+import { whileSpaceValidatory } from "../../constants/index";
+import { IResetPassword, IRootState } from "../../interfaces/api";
+import { resetPassword, verifyAccount } from "../../redux/actions/auth";
 import { useFormik } from "formik";
-import { ErrorMessage } from "../components/error/error-message";
-import { InLineLoader } from "../components/loader/inline-loader";
+import { ErrorMessage } from "../../components/error/error-message";
+import { InLineLoader } from "../../components/loader/inline-loader";
 import * as Yup from "yup";
+import { IUser } from "../../interfaces/user";
 
-export const Login = () => {
+export const Verify = () => {
   const isLoggedIn = useSelector<IRootState, boolean>(
     (s) => s?.auth?.isLoggedIn
-  );
-  const isNotVerified = useSelector<IRootState, boolean>(
-    (s) => s?.auth?.isNotVerified
   );
   const isLoading = useSelector<IRootState, boolean>((s) => s?.api?.isLoading);
   const navigate = useNavigate();
   const [errorMessage, setErrorMEssage] = useState("");
   useEffect(() => {
+    console.log('==========',isLoggedIn)
     if (isLoggedIn) {
       navigate("/groups", { replace: true });
-    } else if (isNotVerified) {
-      navigate("/verify", { replace: true });
     }
-  }, [isLoggedIn, isNotVerified]);
+  }, [isLoggedIn]);
 
   const dispatch = useDispatch();
 
-  const loginForm = useFormik({
+  const verifyForm = useFormik({
     initialValues: {
       userName: "",
-      password: "",
+      code: "",
     },
     onSubmit: (value) => {
       value.userName = value?.userName?.trim();
-      value.password = value?.password?.trim();
-      (dispatch(doLogin(value)) as any)?.catch((err: any) => {
-        setErrorMEssage("Invalid login credentials!");
-      });
+      (dispatch(verifyAccount(value as IResetPassword)) as any)
+        ?.then((res: any) => {
+          navigate("/login", { replace: true });
+        })
+        ?.catch((err: any) => {
+          setErrorMEssage("Invalid details provided!");
+        });
     },
     validationSchema: Yup.object().shape({
       userName: Yup.string()
         .required("Please enter username")
         .test(whileSpaceValidatory("User name")),
-      password: Yup.string()
-        .required("Please enter password")
+      code: Yup.string()
+        .required("Please verification code")
         .test(whileSpaceValidatory("Password")),
     }),
   });
@@ -63,7 +63,7 @@ export const Login = () => {
       <form
         onChange={() => setErrorMEssage("")}
         className="flex flex-row justify-center"
-        onSubmit={loginForm.handleSubmit}
+        onSubmit={verifyForm.handleSubmit}
       >
         <div className="flex flex-col align-middle">
           <div className="w-fit">
@@ -73,40 +73,31 @@ export const Login = () => {
               name="userName"
               id="iUsername"
               placeholder="User name"
-              onChange={loginForm.handleChange}
-              onBlur={loginForm.handleBlur}
-              value={loginForm.values.userName}
+              onChange={verifyForm.handleChange}
+              onBlur={verifyForm.handleBlur}
+              value={verifyForm.values.userName}
             />
           </div>
-          <ErrorMessage form={loginForm} control={"userName"} />
-          <div>
+          <ErrorMessage form={verifyForm} control={"userName"} />
+          <div className="w-fit">
             <input
               className={`${THEME.transparentControl}`}
-              type="password"
-              name="password"
-              id="iPassword"
-              placeholder="Password"
-              onChange={loginForm.handleChange}
-              onBlur={loginForm.handleBlur}
-              value={loginForm.values.password}
+              type="text"
+              name="code"
+              id="iCode"
+              placeholder="Verification code"
+              onChange={verifyForm.handleChange}
+              onBlur={verifyForm.handleBlur}
+              value={verifyForm.values.code}
             />
           </div>
-          <ErrorMessage form={loginForm} control={"password"} />
+          <ErrorMessage form={verifyForm} control={"code"} />
           <button type="submit" className={`${THEME.btnPrimarySquarish}`}>
             <InLineLoader show={isLoading} />
-            Login
+            Verify Account
           </button>
-          <div className="flex text-sm mt-2 justify-between">
+          <div className="flex text-sm mt-2">
             <ErrorMessage error={errorMessage} />
-            <span className="cursor-pointer text-blue-500">
-              <Link to={"/forgot-password"}>Forgot password?</Link>
-            </span>
-          </div>
-          <div>
-            Don't have an Account?{" "}
-            <span className="cursor-pointer text-blue-500">
-              <Link to={"/sign-up"}>Sign Up</Link>
-            </span>
           </div>
         </div>
       </form>

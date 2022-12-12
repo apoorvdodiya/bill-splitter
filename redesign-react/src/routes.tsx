@@ -8,6 +8,9 @@ import { setSessionUser } from './redux/slices/auth';
 import { useDispatch } from 'react-redux';
 import { SignUp } from './pages/signup';
 import { Splits } from './pages/split/split';
+import { ForgotPassword } from './pages/password/forgot';
+import { ResetPassword } from './pages/password/reset';
+import { Verify } from './pages/password/verify';
 
 export const ApiRoutes = () => {
   const dispatch = useDispatch();
@@ -17,7 +20,10 @@ export const ApiRoutes = () => {
   return <Routes>
     <Route path='/' >
       <Route path='login' element={<Login />} />
+      <Route path='forgot-password' element={<ForgotPassword />} />
+      <Route path='reset-password' element={<ResetPassword />} />
       <Route path='sign-up' element={<SignUp />} />
+      <Route path='verify' element={<Verify />} />
       <Route path='/' element={<AuthGuard><Layout /></AuthGuard>}>
         <Route path='home' element={<Home />} />
         <Route path='groups' element={<Groups />} />
